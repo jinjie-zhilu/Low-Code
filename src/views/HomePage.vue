@@ -80,16 +80,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useCanvasStore, useElementsStore } from '../store'
-import { storeToRefs } from 'pinia'
-import { ComponentList, EditCanvas } from '../components'
 import { useDark, useToggle } from '@vueuse/core'
+import { ComponentList, EditCanvas } from '../components'
 
 let canvas = useCanvasStore()
 let elements = useElementsStore()
-let state = {
-    canvas: canvas,
-    elements: elements
-}
 
 // 黑夜模式
 const isDark = useDark()

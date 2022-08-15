@@ -1,3 +1,4 @@
+import throttle from '@/utils/throttle'
 import { ElementItem } from '../../interface'
 
 interface Position {
@@ -22,7 +23,8 @@ export default function userMove(elements) {
     let focusElements: Array<ElementItem> = []
 
     // 移动鼠标
-    const mouseMove = (e) => {
+    const mouseMove = throttle((e) => {
+        // 记录移动位置
         let { clientX: moveX, clientY: moveY } = e
         let durX: number = moveX - startDrag.X
         let durY: number = moveY - startDrag.Y
@@ -30,7 +32,7 @@ export default function userMove(elements) {
         // 移动元素
         elements.move(durX, durY, focusElements, startDrag.Pos)
         isMove = true
-    }
+    }, 20)
 
     // 移动鼠标
     const mouseUp = (e) => {
