@@ -43,34 +43,7 @@
                 </el-container>
                 <!-- 右侧属性表单 -->
                 <el-aside class="rightmenu">
-                    <h4>画布属性</h4>
-                    <el-divider></el-divider>
-                    <el-form label-position="left" label-width="100px" :model="canvas" style="max-width: 100%">
-                        <el-form-item label="画布背景">
-                            <el-color-picker v-model="canvas.bgColor" />
-                        </el-form-item>
-                        <el-form-item label="画布宽度">
-                            <el-input v-model="canvas.width">
-                                <template #suffix>
-                                    px
-                                </template>
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="画布高度">
-                            <el-input v-model="canvas.height">
-                                <template #suffix>
-                                    px
-                                </template>
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="缩放比例">
-                            <el-input v-model="canvas.zoom">
-                                <template #suffix>
-                                    %
-                                </template>
-                            </el-input>
-                        </el-form-item>
-                    </el-form>
+                    <ConfigMenu></ConfigMenu>
                 </el-aside>
             </el-container>
         </el-container>
@@ -79,11 +52,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useCanvasStore, useElementsStore } from '../store'
+import { useElementsStore } from '../store'
 import { useDark, useToggle } from '@vueuse/core'
-import { ComponentList, EditCanvas } from '../components'
+import { ComponentList, EditCanvas, ConfigMenu } from '../components'
 
-let canvas = useCanvasStore()
 let elements = useElementsStore()
 
 // 黑夜模式
