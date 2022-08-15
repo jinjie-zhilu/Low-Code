@@ -9,6 +9,7 @@
 - Element Plus
 
 ## 项目目录结构
+```
 Low-Code  
 │  .gitignore  
 │  auto-imports.d.ts  
@@ -71,7 +72,7 @@ Low-Code
     │        
     └─views // 页面  
             HomePage.vue    // 主页  
-
+```
 ## 功能点进展
 
 - 顶部工具栏样式
