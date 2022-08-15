@@ -25,11 +25,21 @@ export let registerComponent = createMapping()
 registerComponent.register({
     key: 'text',
     label: '文本',
-    render: (data) => <span>{data.label}</span>
+    width: 60,
+    height: 32,
+    zIndex: 0,
+    fontSize: 14,
+    color: "#333",
+    render: (data) => <p style={{ textAlign: 'center' }}>{data.label}</p>
 })
 
 registerComponent.register({
     key: 'btn',
     label: '按钮',
+    width: 60,
+    height: 32,
+    zIndex: 0,
+    fontSize: 14,
+    color: "#333",
     render: (data) => <ElButton>{ data.label }</ElButton>
 })

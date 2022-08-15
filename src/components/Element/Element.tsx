@@ -12,8 +12,12 @@ export default defineComponent({
         
         // 元素的样式
         const elementStyle = computed(() => ({
-            top: `${data.top}px`,
-            left: `${data.left}px`,
+            top: `${data.top - data.height / 2}px`,
+            left: `${data.left - data.width / 2}px`,
+            width: `${data.width}px`,
+            height: `${data.height}px`,
+            zIndex: data.zIndex,
+            fontSize: `${data.fontSize}px`,
             color: data.color
         }))
 

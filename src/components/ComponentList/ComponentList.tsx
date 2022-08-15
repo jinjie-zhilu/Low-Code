@@ -51,12 +51,12 @@ export default defineComponent({
 
         // 松开
         const drop = (e) => {
+            let componentData = components.componentMap[currentElement.key]
+
             elements.addElement({
                 top: e.offsetY,
                 left: e.offsetX,
-                key: currentElement.key,
-                label: currentElement.label,
-                color: '#333'
+                ...componentData
             })
             currentElement = null
         } 

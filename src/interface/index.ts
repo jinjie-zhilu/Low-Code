@@ -32,10 +32,14 @@ export interface Canvas {
 // 组件元素属性
 export interface ElementItem {
     id: number,
-    top: number,
-    left: number,
     key: string,
     label: string,
+    top: number,
+    left: number,
+    width: number,
+    height: number,
+    zIndex: number,
+    fontSize: number,
     color: string
 }
 
