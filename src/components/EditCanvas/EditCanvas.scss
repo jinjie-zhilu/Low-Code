@@ -3,6 +3,15 @@
 
     .element-item {
         position: absolute;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
     }
 }
 
@@ -36,5 +45,11 @@
             font-size: 12px;
             user-select: none;
         }
+    }
+}
+
+.element-focus {
+    &::after {
+        border: 2px dashed #409eff;
     }
 }

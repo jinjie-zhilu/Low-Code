@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
+import { ElementItem } from "@/interface";
 
-export const elementsStore = defineStore('elements', {
+export const useElementsStore = defineStore('elements', {  
     state: () => {
         return {
             sum: 0,
@@ -8,11 +9,22 @@ export const elementsStore = defineStore('elements', {
         }
     },
     getters: {
-
+        // 获取选中元素的个数
+        focusNum(): number {
+            let focusNum: number = 0
+            this.elements.forEach(element => focusNum += element.focus ? 1 : 0)
+            return focusNum
+        },
+        focusElements(): Array<ElementItem> {
+            let focus = []
+            let unfocus = []
+            this.elements.forEach(element => (element.focus ? focus : unfocus).push(element))
+            return focus
+        }
     },
     actions: {
         // 添加元素
-        addElement(component): void {
+        addElement(component: ElementItem): void {
             this.elements.push({
                 id: this.num,
                 ...component
@@ -20,10 +32,20 @@ export const elementsStore = defineStore('elements', {
             this.num++
         },
         // 清空元素
-        clearAll() {
+        clearAll(): void {
             this.num = 0
-            this.elements.splice(0,this.elements.length)
-            
+            this.elements.splice(0, this.elements.length)
+        },
+        // 清空元素 focus 状态
+        clearFocus(): void {
+            this.elements.forEach(item => item.focus = false)
+        },
+        // 移动元素
+        move(X: number, Y: number, focus: Array<ElementItem>, Pos: {top: number, left: number}[]): void {
+            focus.map((element, index) => {
+                element.top = Pos[index].top + Y
+                element.left = Pos[index].left + X
+            })
         }
     }
 })

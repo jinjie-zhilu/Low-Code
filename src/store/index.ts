@@ -1,8 +1,8 @@
 import type { App } from "vue"
 import { createPinia } from "pinia"
 import { createPersistedState } from "pinia-persistedstate-plugin"
-import { canvasStore } from "./canvas"
-import { elementsStore } from "./elements";
+import { useCanvasStore } from "./canvas"
+import { useElementsStore } from "./elements";
 
 const store = createPinia()
 store.use(createPersistedState())
@@ -13,6 +13,6 @@ export function setupStore(app: App<Element>) {
 
 export {
     store,
-    canvasStore,
-    elementsStore
+    useCanvasStore,
+    useElementsStore
 }

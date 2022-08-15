@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const canvasStore = defineStore('canvas', {
+export const useCanvasStore = defineStore('canvas', {
     state: () => {
         return {
             bgColor: "#fff",

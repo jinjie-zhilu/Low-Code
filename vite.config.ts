@@ -4,6 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,6 +18,12 @@ export default defineConfig({
         vue(),
         vueJsx()
     ],
+
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src')
+        }
+    },
 
     base: process.env.NODE_ENV === 'production' ? './' : '/',
 })

@@ -18,7 +18,13 @@
         ],
         "skipLibCheck": true,
         "outDir": "build",
-        "allowJs": true
+        "allowJs": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        }
     },
     "include": [
         "src/**/*.ts",

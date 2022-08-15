@@ -33,6 +33,7 @@ export interface Canvas {
 export interface ElementItem {
     id: number,
     key: string,
+    focus: boolean,
     label: string,
     top: number,
     left: number,

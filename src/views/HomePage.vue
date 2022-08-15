@@ -37,7 +37,7 @@
                     <!-- 画布 -->
                     <el-main class="canvas-box">
                         <el-scrollbar class="canvas-block">
-                            <EditCanvas v-model="state"></EditCanvas>
+                            <EditCanvas></EditCanvas>
                         </el-scrollbar>
                     </el-main>
                 </el-container>
@@ -79,13 +79,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { canvasStore, elementsStore } from '../store'
+import { useCanvasStore, useElementsStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { ComponentList, EditCanvas } from '../components'
 import { useDark, useToggle } from '@vueuse/core'
 
-let canvas = canvasStore()
-let elements = elementsStore()
+let canvas = useCanvasStore()
+let elements = useElementsStore()
 let state = {
     canvas: canvas,
     elements: elements
