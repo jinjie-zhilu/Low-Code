@@ -1,15 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { createPinia } from 'pinia'
+import { setupStore } from './store'
 import router from './router/index'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './assets/css/dark.css'
 
-const pinia = createPinia()
 const app = createApp(App)
+setupStore(app)
 
 app
-    .use(pinia)
     .use(router)
     .mount('#app')
 

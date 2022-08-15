@@ -31,7 +31,7 @@
             <el-container>
                 <!-- 左侧组件列表 -->
                 <el-aside class="leftmenu">
-                    <ComponentBox></ComponentBox>
+                    <ComponentList></ComponentList>
                 </el-aside>
                 <el-container>
                     <!-- 画布 -->
@@ -79,11 +79,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import { canvasStore } from '../store/canvas'
-import { elementsStore } from '../store/elements'
+import { canvasStore, elementsStore } from '../store'
 import { storeToRefs } from 'pinia'
-import EditCanvas from '../packages/canvas'
-import ComponentBox from '../packages/components'
+import { ComponentList, EditCanvas } from '../components'
 import { useDark, useToggle } from '@vueuse/core'
 
 let canvas = canvasStore()

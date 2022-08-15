@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import canvas from '../packages/canvas'
 
 export const canvasStore = defineStore('canvas', {
     state: () => {

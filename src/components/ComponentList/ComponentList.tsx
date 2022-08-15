@@ -1,8 +1,8 @@
 import { defineComponent, inject, VNodeRef, ref } from 'vue'
 import type { Ref } from 'vue'
-import { ComponentInfo, BaseData } from '../interface'
-import { elementsStore } from '../store/elements'
-import emitter from '../utils/bus'
+import { ComponentInfo, BaseData } from '../../interface'
+import { elementsStore } from '../../store/elements'
+import emitter from '../../utils/bus'
 import { ElDivider } from 'element-plus'
 
 export default defineComponent({

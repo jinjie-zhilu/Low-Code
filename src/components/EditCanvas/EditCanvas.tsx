@@ -1,10 +1,10 @@
 import { computed, defineComponent, ref } from 'vue'
 import type { Ref } from 'vue'
-import { EditData, Canvas, ElementItem } from '../interface'
+import { EditData, Canvas, ElementItem } from '../../interface'
 import type { PropType } from 'vue'
-import Element from './element'
-import './canvas.scss'
-import emitter from '../utils/bus'
+import { Element } from '../'
+import './EditCanvas.scss'
+import emitter from '../../utils/bus'
 
 export default defineComponent({
     props: {
@@ -15,7 +15,6 @@ export default defineComponent({
         let data: EditData = props.modelValue
         let canvas: Canvas = data.canvas
         let elements: Array<ElementItem> = data.elements.elements
-        console.log(canvas, elements);
         
 
         // 画布的样式

@@ -21,10 +21,8 @@ export const elementsStore = defineStore('elements', {
         },
         // 清空元素
         clearAll() {
-            console.log(this.elements);
             this.num = 0
             this.elements.splice(0,this.elements.length)
-            console.log(this.elements);
             
         }
     }
