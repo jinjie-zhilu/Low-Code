@@ -1,9 +1,9 @@
-import { BaseData } from "@/interface"
+import { BaseData, ComponentInfo } from "@/interface"
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 import emitter from '../../utils/bus'
 
-export default function userDragger(elements, components) {
+export default function userDragger(elements, components: ComponentInfo) {
 
     // 获取画布ref
     let contentRef: Ref<any> = ref()

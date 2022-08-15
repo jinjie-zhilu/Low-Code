@@ -2,7 +2,7 @@ import { defineComponent, inject } from 'vue'
 import { ComponentInfo, BaseData } from '../../interface'
 import { useElementsStore } from '../../store/elements'
 import { ElDivider } from 'element-plus'
-import userDragger from './userDragger'
+import useDragger from './useDragger'
 
 export default defineComponent({
     setup() {
@@ -14,7 +14,7 @@ export default defineComponent({
         const componentList: Array<BaseData> = components.componentList
 
         // 拖拽进入画布逻辑
-        const { dragstart, dragend } = userDragger(elements, components)
+        const { dragstart, dragend } = useDragger(elements, components)
 
         // 生成模板
         return () => (

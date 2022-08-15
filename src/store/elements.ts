@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ElementItem } from "@/interface";
+import { ElementItem } from "@/interface"
 
 export const useElementsStore = defineStore('elements', {  
     state: () => {
@@ -9,12 +9,7 @@ export const useElementsStore = defineStore('elements', {
         }
     },
     getters: {
-        // 获取选中元素的个数
-        focusNum(): number {
-            let focusNum: number = 0
-            this.elements.forEach(element => focusNum += element.focus ? 1 : 0)
-            return focusNum
-        },
+        // 获取选中元素列表
         focusElements(): Array<ElementItem> {
             let focus = []
             let unfocus = []
