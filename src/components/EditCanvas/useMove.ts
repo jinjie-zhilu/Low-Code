@@ -1,7 +1,7 @@
 import { Pos } from '@/interface/data'
 import throttle from '@/utils/throttle'
 import { Ref } from 'vue'
-import { ElementItem, ElementsStore } from '../../interface'
+import { CanvasStore, ElementItem, ElementsStore } from '../../interface'
 
 interface Lines {
     X: Array < {
@@ -28,6 +28,7 @@ interface DragState {
 
 export default function userMove(
     elements: ElementsStore,
+    canvas: CanvasStore,
     snapline: Ref<{
         X: number,
         Y: number
@@ -154,7 +155,7 @@ export default function userMove(
             maxWidth: originW
         } = focusInfo()
 
-        // 准备拖动状态数据
+        // 初始化拖动状态数据
         dragState = {
             X: e.clientX,
             Y: e.clientY,
@@ -168,6 +169,20 @@ export default function userMove(
                     X: [],
                     Y: []
                 }
+
+                // 添加 canvas 作为对齐参照
+                unfocus.push({
+                    top: 0,
+                    left: 0,
+                    key: 'canvas',
+                    label: 'canvas',
+                    zIndex: 1,
+                    fontSize: 14,
+                    focus: false,
+                    color: '#fff',
+                    width: canvas.width,
+                    height: canvas.height
+                })
 
                 unfocus.forEach((element) => {
                     const {

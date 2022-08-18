@@ -35,7 +35,7 @@ export interface ElementItem {
     zIndex: number,
     fontSize: number,
     color: string,
-    render: Function
+    render?: Function
 }
 
 // 编辑数据

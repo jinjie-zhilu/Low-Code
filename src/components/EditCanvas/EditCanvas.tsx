@@ -38,7 +38,7 @@ export default defineComponent({
         emitter.emit("event", contentRef)
 
         // 引入移动函数
-        const { elementMouseDown, elementMouseUp } = useMove(elements, snapline, isMove)
+        const { elementMouseDown, elementMouseUp } = useMove(elements, canvas, snapline, isMove)
 
         // 生成模板
         return () => (
