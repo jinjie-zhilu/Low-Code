@@ -45,3 +45,9 @@ export interface EditData {
         elements: Array<ElementItem>
     }
 }
+
+// 坐标
+export interface Pos {
+    X: number,
+    Y: number
+}

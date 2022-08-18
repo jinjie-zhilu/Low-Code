@@ -6,6 +6,7 @@ import { useCanvasStore, useElementsStore } from '@/store'
 import './EditCanvas.scss'
 import emitter from '../../utils/bus'
 import useMove from './useMove'
+import { Pos } from '@/interface/data'
 
 export default defineComponent({
     setup() {
@@ -14,10 +15,7 @@ export default defineComponent({
         let elements: ElementsStore = useElementsStore()
         let elementsList: Array<ElementItem> = elements.elements
         // 对齐线
-        let snapline: Ref<{
-            X: number,
-            Y: number
-        }> = ref({
+        let snapline: Ref<Pos> = ref({
             X: null,
             Y: null
         })

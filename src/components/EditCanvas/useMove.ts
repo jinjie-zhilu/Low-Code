@@ -1,3 +1,4 @@
+import { Pos } from '@/interface/data'
 import throttle from '@/utils/throttle'
 import { Ref } from 'vue'
 import { ElementItem, ElementsStore } from '../../interface'
@@ -16,6 +17,8 @@ interface Lines {
 interface DragState {
     X: number,
     Y: number,
+    originTop?: number,
+    originLeft?: number,
     Pos?: {
         top: number,
         left: number
@@ -43,6 +46,9 @@ export default function userMove(
 
     // 获取选中元素块信息
     const focusInfo = () => {
+        if (!focusElements.length) {
+            return
+        }
         let minTop: number = focusElements[0].top
         let minLeft: number = focusElements[0].left
         let maxBottom: number = focusElements[0].top + focusElements[0].height
@@ -67,22 +73,14 @@ export default function userMove(
         }
     }
 
-    // 移动鼠标
-    const mouseMove = throttle((e) => {
-        // 记录移动位置
-        let { clientX: moveX, clientY: moveY } = e
-        let durX: number = moveX - dragState.X
-        let durY: number = moveY - dragState.Y
-
+    // 计算对齐线
+    const calcSnapline: (dur: Pos) => void = throttle((dur: Pos) => {
         // 记录选中块的位置
         const {
             minTop: originTop,
-            minLeft: originLeft,
-            maxHeight: originH,
-            maxWidth: originW
+            minLeft: originLeft
         } = focusInfo()
 
-        // 计算对齐线
         snapline.value.X = null
         snapline.value.Y = null
 
@@ -91,20 +89,37 @@ export default function userMove(
             const { show: showY, top } = dragState.lines.Y[i]
             let difX: number = left - originLeft
             let difY: number = top - originTop
-            if (Math.abs(difX) < 5) {
+            if (Math.abs(difX) < 6) {
                 snapline.value.X = showX
-                durX += difX
+                dur.X = left - dragState.originLeft
             }
-            if (Math.abs(difY) < 5) {
+            if (Math.abs(difY) < 6) {
                 snapline.value.Y = showY
-                durY += difY
+                dur.Y = top - dragState.originTop
             }
-            if (snapline.value.X !== null || snapline.value.Y !== null)
+            if (snapline.value.X !== null || snapline.value.Y !== null) {
                 break
+            }
         }
 
         // 移动元素
-        elements.move(durX, durY, focusElements, dragState.Pos)
+        elements.move(dur.X, dur.Y, focusElements, dragState.Pos)
+    }, 50)
+
+    // 移动鼠标
+    const mouseMove = throttle((e) => {
+        // 记录移动位置
+        let { clientX: moveX, clientY: moveY } = e
+        let dur: Pos = {
+            X: moveX - dragState.X,
+            Y: moveY - dragState.Y
+        }
+
+        // 计算对齐线
+        calcSnapline(dur)
+
+        // 移动元素
+        elements.move(dur.X, dur.Y, focusElements, dragState.Pos)
 
         isMove.value = true
     }, 20)
@@ -113,8 +128,16 @@ export default function userMove(
     const mouseUp = (e) => {
         // 移动状态置否
         isMove.value = false
-        console.log(isMove);
-        
+
+        // 记录移动位置
+        let { clientX: moveX, clientY: moveY } = e
+        let dur: Pos = {
+            X: moveX - dragState.X,
+            Y: moveY - dragState.Y
+        }
+
+        // 计算对齐线
+        calcSnapline(dur)
 
         // 解除移动事件
         document.removeEventListener('mousemove', mouseMove)
@@ -135,6 +158,8 @@ export default function userMove(
         dragState = {
             X: e.clientX,
             Y: e.clientY,
+            originTop: originTop,
+            originLeft: originLeft,
             Pos: focusElements.map(({ top, left }) => ({ top, left })),
             lines: (() => {
                 const unfocus: Array<ElementItem> = elements.focusElements.unfocus
