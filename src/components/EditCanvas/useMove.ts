@@ -1,5 +1,5 @@
 import throttle from '@/utils/throttle'
-import { ElementItem } from '../../interface'
+import { ElementItem, ElementsStore } from '../../interface'
 
 interface Lines {
     X: Array < {
@@ -22,7 +22,7 @@ interface DragState {
     lines?: Lines
 }
 
-export default function userMove(elements, snapline): { elementMouseDown: Function, elementMouseUp: Function } {
+export default function userMove(elements: ElementsStore, snapline): { elementMouseDown: Function, elementMouseUp: Function } {
 
     // 位置信息
     let dragState: DragState = {
@@ -85,11 +85,11 @@ export default function userMove(elements, snapline): { elementMouseDown: Functi
             const { show: showY, top } = dragState.lines.Y[i]
             let difX: number = left - originLeft
             let difY: number = top - originTop
-            if (Math.abs(difX) < 2) {
+            if (Math.abs(difX) < 5) {
                 snapline.value.X = showX
                 durX += difX
             }
-            if (Math.abs(difY) < 2) {
+            if (Math.abs(difY) < 5) {
                 snapline.value.Y = showY
                 durY += difY
             }

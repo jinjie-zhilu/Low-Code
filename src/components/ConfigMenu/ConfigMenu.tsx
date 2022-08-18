@@ -3,12 +3,14 @@ import { ElCollapse, ElCollapseItem, ElColorPicker, ElForm, ElFormItem, ElInput 
 import { ref, defineComponent } from "vue";
 import type { Ref } from "vue";
 import { computed } from "vue";
+import { Store } from "pinia";
+import { CanvasStore, ElementsStore } from "@/interface";
 
 export default defineComponent({
     setup() {
 
-        let elements = useElementsStore()
-        let canvas = useCanvasStore()
+        let elements: ElementsStore = useElementsStore()
+        let canvas: CanvasStore = useCanvasStore()
         // 折叠面板显示内容
         let configCollapse: Ref<string> = ref('baseConfig')
         // 当前选中的元素 id
@@ -27,6 +29,7 @@ export default defineComponent({
             }
         })
         
+        // 基础属性配置表单
         const baseConfigMenu = {
             canvas: {
                 title: '画布样式',

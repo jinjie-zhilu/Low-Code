@@ -4,8 +4,8 @@ export const useCanvasStore = defineStore('canvas', {
     state: () => {
         return {
             bgColor: "#fff",
-            width: 1080,
-            height: 800,
+            width: 800,
+            height: 520,
             zoom: 100
         }
     },

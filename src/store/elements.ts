@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
-import { ElementItem } from "@/interface"
-import { stepProps } from 'element-plus'
+import { ElementItem, ElementsStore } from "@/interface"
 
-export const useElementsStore = defineStore('elements', {  
+export const useElementsStore: () => ElementsStore = defineStore('elements', {  
     state: () => {
         return {
             sum: 0,

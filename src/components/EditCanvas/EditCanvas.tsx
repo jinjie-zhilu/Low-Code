@@ -1,19 +1,17 @@
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, ref, StyleValue } from 'vue'
 import type { Ref } from 'vue'
-import { EditData, Canvas, ElementItem } from '../../interface'
-import type { PropType } from 'vue'
+import { ElementItem, CanvasStore, ElementsStore } from '../../interface'
 import { Element } from '../'
 import { useCanvasStore, useElementsStore } from '@/store'
 import './EditCanvas.scss'
 import emitter from '../../utils/bus'
-import useMove from "./useMove"
-import userMove from './useMove'
+import useMove from './useMove'
 
 export default defineComponent({
     setup() {
         // 处理数据
-        let canvas = useCanvasStore()
-        let elements = useElementsStore()
+        let canvas: CanvasStore = useCanvasStore()
+        let elements: ElementsStore = useElementsStore()
         let elementsList: Array<ElementItem> = elements.elements
         // 对齐线
         let snapline: Ref<{
@@ -40,14 +38,13 @@ export default defineComponent({
         emitter.emit("event", contentRef)
 
         // 引入移动函数
-        const { elementMouseDown, elementMouseUp } = userMove(elements, snapline)
-        
+        const { elementMouseDown, elementMouseUp } = useMove(elements, snapline)
 
         // 生成模板
         return () => (
             <div class="canvas-block">
                 <div class="element-content"
-                    style={canvasStyle.value}
+                    style={canvasStyle.value as StyleValue}
                     ref={contentRef}
                     onmousedown={elements.clearFocus}>
                     {

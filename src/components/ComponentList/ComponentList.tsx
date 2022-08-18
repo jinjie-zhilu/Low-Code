@@ -1,5 +1,5 @@
 import { defineComponent, inject } from 'vue'
-import { ComponentInfo, ElementItem } from '../../interface'
+import { ComponentInfo, ElementItem, ElementsStore } from '../../interface'
 import { useElementsStore } from '../../store/elements'
 import { ElDivider } from 'element-plus'
 import useDragger from './useDragger'
@@ -7,7 +7,7 @@ import useDragger from './useDragger'
 export default defineComponent({
     setup() {
         // 获取 store
-        let elements = useElementsStore()
+        let elements: ElementsStore = useElementsStore()
 
         // 获取组件列表
         let components: ComponentInfo = inject('components')

@@ -50,23 +50,25 @@
     </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useElementsStore } from '../store'
+<script lang="ts" setup>
+import { ref, WritableComputedRef } from 'vue'
+import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { ComponentList, EditCanvas, ConfigMenu } from '../components'
+import { ElementsStore } from "@/interface"
+import { ElMessage, ElMessageBox } from 'element-plus'
 
-let elements = useElementsStore()
+let elements: ElementsStore = useElementsStore()
 
 // 黑夜模式
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+const isDark: WritableComputedRef<boolean> = useDark()
+const toggleDark: (value?: boolean) => boolean = useToggle(isDark)
 
 // 主题切换
 let themeSelector = ref(isDark.value)
 
 // 清空画布
-const clearCanvas = () => {
+const clearCanvas: () => void = () => {
     ElMessageBox.confirm(
         '将清空画布中的所有元素，是否继续?',
         '警告',
