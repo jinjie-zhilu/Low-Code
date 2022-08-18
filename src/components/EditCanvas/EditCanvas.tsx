@@ -21,6 +21,8 @@ export default defineComponent({
             X: null,
             Y: null
         })
+        // 是否处于移动状态
+        let isMove: Ref<boolean> = ref(false)
 
         // 画布的样式
         const canvasStyle = computed(() => ({
@@ -38,7 +40,7 @@ export default defineComponent({
         emitter.emit("event", contentRef)
 
         // 引入移动函数
-        const { elementMouseDown, elementMouseUp } = useMove(elements, snapline)
+        const { elementMouseDown, elementMouseUp } = useMove(elements, snapline, isMove)
 
         // 生成模板
         return () => (
@@ -58,8 +60,8 @@ export default defineComponent({
                             ></Element>
                         ))
                     }
-                    {snapline.value.X !== null && <div class='line-x' style={{ left: `${snapline.value.X}px` }}></div>}
-                    {snapline.value.Y !== null && <div class='line-y' style={{ top: `${snapline.value.Y}px` }}></div>}
+                    {isMove.value && snapline.value.X !== null && <div class='line-x' style={{ left: `${snapline.value.X}px` }}></div>}
+                    {isMove.value && snapline.value.Y !== null && <div class='line-y' style={{ top: `${snapline.value.Y}px` }}></div>}
                 </div>
             </div>
         )

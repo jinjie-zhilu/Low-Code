@@ -1,4 +1,5 @@
 import throttle from '@/utils/throttle'
+import { Ref } from 'vue'
 import { ElementItem, ElementsStore } from '../../interface'
 
 interface Lines {
@@ -22,14 +23,19 @@ interface DragState {
     lines?: Lines
 }
 
-export default function userMove(elements: ElementsStore, snapline): { elementMouseDown: Function, elementMouseUp: Function } {
+export default function userMove(
+    elements: ElementsStore,
+    snapline: Ref<{
+        X: number,
+        Y: number
+    }>,
+    isMove: Ref<boolean>): { elementMouseDown: Function, elementMouseUp: Function } {
 
     // 位置信息
     let dragState: DragState = {
         X: 0,
         Y: 0
     }
-    let isMove: boolean
     let rawFocus: boolean
 
     // 选中元素信息
@@ -100,11 +106,16 @@ export default function userMove(elements: ElementsStore, snapline): { elementMo
         // 移动元素
         elements.move(durX, durY, focusElements, dragState.Pos)
 
-        isMove = true
+        isMove.value = true
     }, 20)
 
     // 鼠标抬起
     const mouseUp = (e) => {
+        // 移动状态置否
+        isMove.value = false
+        console.log(isMove);
+        
+
         // 解除移动事件
         document.removeEventListener('mousemove', mouseMove)
         document.removeEventListener('mouseup', mouseUp)
@@ -189,8 +200,6 @@ export default function userMove(elements: ElementsStore, snapline): { elementMo
             })()
         }
 
-        console.log(dragState.lines);
-
         // 注册移动事件
         document.addEventListener('mousemove', mouseMove)
         document.addEventListener('mouseup', mouseUp)
@@ -202,8 +211,9 @@ export default function userMove(elements: ElementsStore, snapline): { elementMo
         e.preventDefault()
         e.stopPropagation()
 
-        // 是否移动置否
-        isMove = false
+        // 移动状态置否
+        isMove.value = false
+
         // 原始选中状态
         rawFocus = item.focus
 
@@ -220,7 +230,7 @@ export default function userMove(elements: ElementsStore, snapline): { elementMo
     // 鼠标放开元素
     const elementMouseUp = (e, item) => {
         // 移动不改变选中状态
-        if (isMove) {
+        if (isMove.value) {
             return
         }
 
