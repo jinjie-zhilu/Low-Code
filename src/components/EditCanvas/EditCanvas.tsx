@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 import type { Ref } from 'vue'
 import { EditData, Canvas, ElementItem } from '../../interface'
 import type { PropType } from 'vue'
@@ -15,6 +15,14 @@ export default defineComponent({
         let canvas = useCanvasStore()
         let elements = useElementsStore()
         let elementsList: Array<ElementItem> = elements.elements
+        // 对齐线
+        let snapline: Ref<{
+            X: number,
+            Y: number
+        }> = ref({
+            X: null,
+            Y: null
+        })
 
         // 画布的样式
         const canvasStyle = computed(() => ({
@@ -32,7 +40,8 @@ export default defineComponent({
         emitter.emit("event", contentRef)
 
         // 引入移动函数
-        const { elementMouseDown, elementMouseUp } = userMove(elements)
+        const { elementMouseDown, elementMouseUp } = userMove(elements, snapline)
+        
 
         // 生成模板
         return () => (
@@ -52,6 +61,8 @@ export default defineComponent({
                             ></Element>
                         ))
                     }
+                    {snapline.value.X !== null && <div class='line-x' style={{ left: `${snapline.value.X}px` }}></div>}
+                    {snapline.value.Y !== null && <div class='line-y' style={{ top: `${snapline.value.Y}px` }}></div>}
                 </div>
             </div>
         )

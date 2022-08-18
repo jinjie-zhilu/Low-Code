@@ -5,18 +5,11 @@ export interface ComponentData {
     left: number
 }
 
-// 组件基础信息
-export interface BaseData {
-    key: string,
-    label: number,
-    render: Function
-}
-
 // 组件信息表
 export interface ComponentInfo {
-    componentList: Array<BaseData>,
+    componentList: Array<ElementItem>,
     componentMap: {
-        [key: string]: BaseData
+        [key: string]: ElementItem
     },
     register: Function
 }
@@ -31,17 +24,18 @@ export interface Canvas {
 
 // 组件元素属性
 export interface ElementItem {
-    id: number,
+    id?: number,
     key: string,
     focus: boolean,
     label: string,
-    top: number,
-    left: number,
+    top?: number,
+    left?: number,
     width: number,
     height: number,
     zIndex: number,
     fontSize: number,
-    color: string
+    color: string,
+    render: Function
 }
 
 // 编辑数据

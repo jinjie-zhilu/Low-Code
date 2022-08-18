@@ -13,10 +13,12 @@ export default defineComponent({
         let configCollapse: Ref<string> = ref('baseConfig')
         // 当前选中的元素 id
         let focusId: Ref<number> = ref(0)
+
         // 当前选中的元素
         let currentFocus: Ref<string> = computed(() => {
-            if (elements.focusElements.length === 1) {
-                let focus = elements.focusElements[0]
+            if (elements.focusElements.focus.length === 1) {
+                let focus = elements.focusElements.focus[0]
+                
                 focusId.value = focus.id
                 baseConfigMenu.general.title = `[${focus.key}]${focus.label}-样式`
                 return 'general'
