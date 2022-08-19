@@ -1,6 +1,5 @@
 import { Command, ElementItem, State } from "@/interface/data"
-import { storeToRefs } from "pinia"
-import { start } from "repl"
+import { ElMessage } from "element-plus"
 import { onUnmounted, ref } from "vue"
 import emitter from "./bus"
 import { deepcopy } from "./deepcopy"
@@ -12,7 +11,7 @@ export function registerCommand(elements) {
         commands: {
             undo: null,
             redo: null,
-            drag: null
+            action: null
         },   // 操作命令-执行函数映射表
         commandArray: [],   // 操作命令列表
         destroyArray: []
@@ -39,6 +38,7 @@ export function registerCommand(elements) {
         }
     }
 
+    // 重做命令
     registry({
         key: 'redo',
         keyboard: 'ctrl+y',
@@ -49,12 +49,16 @@ export function registerCommand(elements) {
                     if (item) {
                         item.redo && item.redo()
                         state.current++
+                        ElMessage.success('重做成功')
+                    } else {
+                        ElMessage.error('没有可重做的操作')
                     }
                 }
             }
         }
     })
 
+    // 撤销命令
     registry({
         key: 'undo',
         keyboard: 'ctrl+z',
@@ -62,35 +66,40 @@ export function registerCommand(elements) {
             return {
                 redo() {
                     if (state.current < 0) {
+                        ElMessage.error('没有可撤销的操作')
                         return
                     }
                     let item: { undo: Function, redo: Function } = state.stack[state.current]
                     if (item) {
                         item.undo && item.undo()
                         state.current--
+                        ElMessage.success('撤销成功')
+                    } else {
+                        ElMessage.error('没有可撤销的操作')
                     }
                 }
             }
         }
     })
 
+    // action 操作
     registry({
-        key: 'drag',
+        key: 'action',
         pushStack: true,
         init() {
             this.before = null
-            // 开始拖拽，保存事件
+            // action 开始，保存事件
             const start: () => void = () => {
                 this.before = deepcopy(elements.elements)
             }
             const end: () => void = () => {
-                state.commands.drag()
+                state.commands.action()
             }
-            emitter.on('dragstart', start)
-            emitter.on('dragend', end)
+            emitter.on('actionStart', start)
+            emitter.on('actionEnd', end)
             return () => {
-                emitter.off('dragstart', start)
-                emitter.off('dragend', end)
+                emitter.off('actionStart', start)
+                emitter.off('actionEnd', end)
             }
         },
         execute() {
@@ -107,13 +116,40 @@ export function registerCommand(elements) {
             }
         }
     })
+        
+    const keyboardEvent = (() => {
+        const onKeydown = (e: KeyboardEvent) => {
+            const { ctrlKey, key } = e
+            let keyString: string = ctrlKey ? `ctrl+${key}` : ''
+            if (keyString) {
+                state.commandArray.forEach(({ keyboard, key }) => {
+                    if (keyboard === keyString) {
+                        state.commands[key]()
+                        e.preventDefault()
+                   }
+               })
+                
+            }
+        }
+        const init = () => {
+            // 初始化
+            window.addEventListener('keydown', onKeydown)
+            return () => {
+                // 销毁
+                window.removeEventListener('keydown', onKeydown)
+            }
+        }
+        return init
+    })()
 
     ;(() => {
+        state.destroyArray.push(keyboardEvent())
         state.commandArray.forEach((command) => {
             command.init && state.destroyArray.push(command.init())
         })
     })()
 
+    // 卸载事件
     onUnmounted(() => {
         state.destroyArray.forEach((fn) => {
             fn && fn()

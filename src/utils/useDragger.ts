@@ -25,7 +25,7 @@ export default function userDragger(elements, components: ComponentRegisty) {
         currentElement = element
         
         // 发布拖拽开始事件
-        emitter.emit('dragstart')
+        emitter.emit('actionStart')
     }
 
     // 拖拽进入
@@ -55,7 +55,7 @@ export default function userDragger(elements, components: ComponentRegisty) {
         currentElement = null
 
         // 发布拖拽结束事件
-        emitter.emit('dragend')
+        emitter.emit('actionEnd')
     }
 
     // 完成拖拽

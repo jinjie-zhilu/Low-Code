@@ -71,7 +71,7 @@ export interface State {
     commands: {
         undo: Command,
         redo: Command,
-        drag: Command
+        action: Command
     },
     commandArray: Array<Command>,
     destroyArray: Array<Function>
