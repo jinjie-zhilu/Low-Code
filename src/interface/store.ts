@@ -33,5 +33,8 @@ export type ElementsStore = Store<'elements',
                 top: number,
                 left: number
             }[]): void
+        set(
+            elements: Array<ElementItem>
+        ): void
     }
 >

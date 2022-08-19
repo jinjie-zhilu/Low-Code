@@ -1,6 +1,6 @@
 import {
     ComponentData,
-    ComponentInfo,
+    ComponentRegisty,
     Canvas,
     ElementItem,
     EditData
@@ -12,7 +12,7 @@ import {
 
 export type {
     ComponentData,
-    ComponentInfo,
+    ComponentRegisty,
     Canvas,
     ElementItem,
     EditData,

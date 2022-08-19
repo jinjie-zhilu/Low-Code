@@ -1,8 +1,8 @@
 import { ElButton } from 'element-plus'
-import { ComponentInfo } from '../interface'
+import { ComponentRegisty } from '@/interface'
 
 // 创建映射函数
-function createMapping(): ComponentInfo {
+function registerComponent(): ComponentRegisty {
     // 组件列表
     const componentList = []
     // 画布组件映射
@@ -19,10 +19,10 @@ function createMapping(): ComponentInfo {
 }
 
 // 导出
-export let registerComponent = createMapping()
+export let registry: ComponentRegisty = registerComponent()
 
 // 注册组件
-registerComponent.register({
+registry.register({
     key: 'text',
     label: '文本',
     focus: false,
@@ -37,7 +37,7 @@ registerComponent.register({
     }}>{data.label}</p>
 })
 
-registerComponent.register({
+registry.register({
     key: 'btn',
     label: '按钮',
     focus: false,

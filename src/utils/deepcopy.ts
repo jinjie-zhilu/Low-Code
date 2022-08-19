@@ -1,4 +1,4 @@
-export function deepcopy(obj: Object): Object {
+export function deepcopy(obj: any): any {
     if (obj instanceof Object) {
         const newObj: Object = {}
         if (Array.isArray(obj)) {

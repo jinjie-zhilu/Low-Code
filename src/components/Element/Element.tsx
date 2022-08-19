@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject } from 'vue'
-import { ComponentInfo, ElementItem } from '../../interface'
+import { ComponentRegisty, ElementItem } from '../../interface'
 import type { PropType } from 'vue'
 
 export default defineComponent({
@@ -22,7 +22,7 @@ export default defineComponent({
         }))
 
         // 获取组件信息
-        let components: ComponentInfo = inject('components')
+        let components: ComponentRegisty = inject('components')
         
         // 获取组件的 render
         const renderComponent = components.componentMap[data.key].render(data)

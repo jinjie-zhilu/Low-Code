@@ -1,8 +1,8 @@
 import { defineComponent, inject } from 'vue'
-import { ComponentInfo, ElementItem, ElementsStore } from '../../interface'
+import { ComponentRegisty, ElementItem, ElementsStore } from '../../interface'
 import { useElementsStore } from '../../store/elements'
 import { ElDivider } from 'element-plus'
-import useDragger from './useDragger'
+import useDragger from '../../utils/useDragger'
 
 export default defineComponent({
     setup() {
@@ -10,7 +10,7 @@ export default defineComponent({
         let elements: ElementsStore = useElementsStore()
 
         // 获取组件列表
-        let components: ComponentInfo = inject('components')
+        let components: ComponentRegisty = inject('components')
         const componentList: Array<ElementItem> = components.componentList
 
         // 拖拽进入画布逻辑

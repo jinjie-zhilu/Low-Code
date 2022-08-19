@@ -5,15 +5,6 @@ export interface ComponentData {
     left: number
 }
 
-// 组件信息表
-export interface ComponentInfo {
-    componentList: Array<ElementItem>,
-    componentMap: {
-        [key: string]: ElementItem
-    },
-    register: Function
-}
-
 // 画布属性
 export interface Canvas {
     bgColor: string,
@@ -50,4 +41,38 @@ export interface EditData {
 export interface Pos {
     X: number,
     Y: number
+}
+
+// 组件信息注册表
+export interface ComponentRegisty {
+    componentList: Array<ElementItem>,
+    componentMap: {
+        [key: string]: ElementItem
+    },
+    register: Function
+}
+
+// 命令
+export interface Command {
+    key: string,
+    keyboard?: string,
+    pushStack?: boolean,
+    init?: Function,
+    execute: Function
+}
+
+// 命令注册表
+export interface State {
+    current: number,
+    stack: Array<{
+        undo: Function,
+        redo: Function
+    }>,
+    commands: {
+        undo: Command,
+        redo: Command,
+        drag: Command
+    },
+    commandArray: Array<Command>,
+    destroyArray: Array<Function>
 }

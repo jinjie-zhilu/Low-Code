@@ -47,6 +47,13 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
                 element.top = Pos[index].top + Y
                 element.left = Pos[index].left + X
             })
+        },
+        // 设置元素
+        set(elements: Array<ElementItem>) {
+            this.clearAll()
+            elements.forEach((item) => {
+                this.addElement(item)
+            })
         }
     }
 })

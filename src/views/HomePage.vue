@@ -4,8 +4,8 @@
             <!-- 顶部工具栏 -->
             <el-header class="topbar">
                 <el-button-group>
-                    <el-button title="撤销"><i class="iconfont icon-undo"></i></el-button>
-                    <el-button title="重做"><i class="iconfont icon-redo"></i></el-button>
+                    <el-button title="撤销" @click="undo"><i class="iconfont icon-undo"></i></el-button>
+                    <el-button title="重做" @click="redo"><i class="iconfont icon-redo"></i></el-button>
                     <el-button title="插入图片"><i class="iconfont icon-img"></i></el-button>
                     <el-button title="清空画布" @click="clearCanvas"><i class="iconfont icon-clear"></i></el-button>
                 </el-button-group>
@@ -51,13 +51,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, WritableComputedRef } from 'vue'
+import { Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { ComponentList, EditCanvas, ConfigMenu } from '../components'
 import { ElementsStore } from "@/interface"
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { registerCommand } from '@/utils/registerCommand'
 
+// 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
 
 // 黑夜模式
@@ -65,9 +67,12 @@ const isDark: WritableComputedRef<boolean> = useDark()
 const toggleDark: (value?: boolean) => boolean = useToggle(isDark)
 
 // 主题切换
-let themeSelector = ref(isDark.value)
+let themeSelector: Ref<boolean> = ref(isDark.value)
 
-// 清空画布
+// 获取操作命令
+let { undo, redo } = registerCommand(elements).commands
+
+// 清空画布方法
 const clearCanvas: () => void = () => {
     ElMessageBox.confirm(
         '将清空画布中的所有元素，是否继续?',

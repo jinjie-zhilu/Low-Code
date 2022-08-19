@@ -4,8 +4,8 @@ import { ElementItem, CanvasStore, ElementsStore } from '../../interface'
 import { Element } from '../'
 import { useCanvasStore, useElementsStore } from '@/store'
 import './EditCanvas.scss'
-import emitter from '../../utils/bus'
-import useMove from './useMove'
+import emitter from '@/utils/bus'
+import useMove from '@/utils/useMove'
 import { Pos } from '@/interface/data'
 
 export default defineComponent({
