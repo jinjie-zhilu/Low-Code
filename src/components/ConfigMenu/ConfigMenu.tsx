@@ -45,22 +45,34 @@ export default defineComponent({
                             <ElColorPicker v-model={canvas.bgColor} />
                         </ElFormItem>
                         <ElFormItem label="画布宽度">
-                            <ElInput
-                                v-model={canvas.width}
-                                v-slots={{ suffix: () => 'px' }}
-                            />
+                            <div class="input-number">
+                                <ElInputNumber
+                                    v-model={canvas.width}
+                                    controlsPosition='right'
+                                    precision={0}
+                                />
+                                <span class='unit'>px</span>
+                            </div>
                         </ElFormItem>
                         <ElFormItem label="画布高度">
-                            <ElInput
-                                v-model={canvas.height}
-                                v-slots={{ suffix: () => 'px' }}
-                            />
+                            <div class="input-number">
+                                <ElInputNumber
+                                    v-model={canvas.height}
+                                    controlsPosition='right'
+                                    precision={0}
+                                />
+                                <span class='unit'>px</span>
+                            </div>
                         </ElFormItem>
                         <ElFormItem label="缩放比例">
-                            <ElInput
-                                v-model={canvas.zoom}
-                                v-slots={{ suffix: () => '%' }}
-                            />
+                            <div class="input-number">
+                                <ElInputNumber
+                                    v-model={canvas.zoom}
+                                    controlsPosition='right'
+                                    precision={0}
+                                />
+                                <span class='unit'>%</span>
+                            </div>
                         </ElFormItem>
                     </ElForm>
             },
@@ -145,7 +157,7 @@ export default defineComponent({
                                 <span class='unit'>px</span>
                             </div>
                         </ElFormItem>
-                        <ElFormItem label="element">
+                        <ElFormItem label="字体颜色">
                             <ElColorPicker v-model={elements.elements[focusId.value].color} />
                         </ElFormItem>
                     </ElForm>

@@ -102,11 +102,18 @@ const clearCanvas: () => void = () => {
             type: 'warning',
         }
     ).then(() => {
+        // 发布删除开始事件
+        emitter.emit('actionStart')
+
+        // 删除
+        elements.clearAll()
         ElMessage({
             type: 'success',
             message: '删除成功',
         })
-        elements.clearAll()
+
+        // 发布删除结束事件
+        emitter.emit('actionEnd')
     })
     .catch(() => {
         ElMessage({
@@ -164,6 +171,6 @@ const clearCanvas: () => void = () => {
 .rightmenu {
     width: 300px;
     height: 92vh;
-    padding: 20px 10px;
+    padding: 20px;
 }
 </style>
