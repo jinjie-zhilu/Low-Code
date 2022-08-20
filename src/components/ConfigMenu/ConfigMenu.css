@@ -1,0 +1,15 @@
+.input-number {
+  position: relative;
+}
+
+.input-number .el-input-number {
+  width: 100%;
+}
+
+.input-number .unit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 40px;
+  color: var(--el-input-icon-color, var(--el-text-color-placeholder));
+}
