@@ -1,9 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 3584728 */
-    src: url('//at.alicdn.com/t/c/font_3584728_yndyrx1xr5.woff2?t=1660454629920') format('woff2'),
-        url('//at.alicdn.com/t/c/font_3584728_yndyrx1xr5.woff?t=1660454629920') format('woff'),
-        url('//at.alicdn.com/t/c/font_3584728_yndyrx1xr5.ttf?t=1660454629920') format('truetype');
+    src: url('//at.alicdn.com/t/c/font_3584728_x6b9wutj4g.woff2?t=1660989549989') format('woff2'),
+        url('//at.alicdn.com/t/c/font_3584728_x6b9wutj4g.woff?t=1660989549989') format('woff'),
+        url('//at.alicdn.com/t/c/font_3584728_x6b9wutj4g.ttf?t=1660989549989') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,18 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-clear:before {
+    content: "\e680";
+}
+
+.icon-image:before {
+    content: "\e6e0";
+}
+
+.icon-wenbenkuang:before {
+    content: "\e600";
 }
 
 .icon-light:before {
@@ -26,7 +38,7 @@
     content: "\ec7d";
 }
 
-.icon-clear:before {
+.icon-delete:before {
     content: "\e8b6";
 }
 

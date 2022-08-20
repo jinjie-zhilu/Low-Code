@@ -23,7 +23,7 @@ export default defineComponent({
                 let focus = elements.focusElements.focus[0]
                 
                 focusId.value = focus.id
-                baseConfigMenu.general.title = `[${focus.key}]-样式`
+                baseConfigMenu.general.title = `[${focus.key}]${focus.id}-样式`
                 return 'general'
             } else {
                 return 'canvas'

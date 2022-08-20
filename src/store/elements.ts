@@ -48,11 +48,24 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
                 element.left = Pos[index].left + X
             })
         },
-        // 设置元素
-        set(elements: Array<ElementItem>) {
+        // 设置元素属性
+        set(elements: Array<ElementItem>): void {
             this.clearAll()
             elements.forEach((item) => {
                 this.addElement(item)
+            })
+        },
+        // 删除元素
+        delete(elements: Array<ElementItem>): void {
+            elements.forEach((item) => {
+                let index: number = 0
+                this.elements.forEach((element, idx) => {
+                    console.log(index)
+                    if (element.id == item.id) 
+                        index = idx
+                })
+
+                console.log(this.elements.splice(index, 1))
             })
         }
     }
