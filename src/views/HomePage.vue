@@ -4,9 +4,18 @@
             <!-- 顶部工具栏 -->
             <el-header class="topbar">
                 <el-button-group>
-                    <el-button title="撤销" @click="undo"><i class="iconfont icon-undo"></i></el-button>
-                    <el-button title="重做" @click="redo"><i class="iconfont icon-redo"></i></el-button>
-                    <el-button title="插入图片"><i class="iconfont icon-img"></i></el-button>
+                    <el-button 
+                    :disabled="state.current < 0" 
+                    title="撤销"
+                    @click="undo"
+                    ><i class="iconfont icon-undo"></i>
+                    </el-button>
+                    <el-button 
+                    :disabled="state.current > state.stack.length - 2" 
+                    title="重做"
+                    @click="redo"
+                    ><i class="iconfont icon-redo"></i>
+                    </el-button>
                     <el-button title="清空画布" @click="clearCanvas"><i class="iconfont icon-clear"></i></el-button>
                 </el-button-group>
                 <div class="divider"></div>
@@ -51,16 +60,23 @@
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref, WritableComputedRef } from 'vue'
+import { reactive, Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
-import { ComponentList, EditCanvas, ConfigMenu } from '../components'
+import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { registerCommand } from '@/utils/registerCommand'
-import type { ElementsStore } from "@/interface"
+import type { ElementsStore, State } from "@/interface"
+import emitter from '@/utils/bus'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
+
+// 获取操作命令
+let state: State = reactive(registerCommand(elements))
+
+// 撤回/重做
+let { undo, redo } = state.commands
 
 // 黑夜模式
 const isDark: WritableComputedRef<boolean> = useDark()
@@ -69,8 +85,11 @@ const toggleDark: (value?: boolean) => boolean = useToggle(isDark)
 // 主题切换
 let themeSelector: Ref<boolean> = ref(isDark.value)
 
-// 获取操作命令
-let { undo, redo } = registerCommand(elements).commands
+const updateState = () => {
+    state.current++
+    state.current--
+}
+emitter.on('updateState', updateState)
 
 // 清空画布方法
 const clearCanvas: () => void = () => {

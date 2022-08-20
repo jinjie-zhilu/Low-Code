@@ -1,7 +1,7 @@
 import { defineComponent, inject } from 'vue'
-import { useElementsStore } from '../../store/elements'
+import { useElementsStore } from '@/store'
 import { ElDivider } from 'element-plus'
-import useDragger from '../../utils/useDragger'
+import useDragger from '@/utils/useDragger'
 import type { ComponentRegisty, ElementItem, ElementsStore } from '@/interface'
 
 export default defineComponent({

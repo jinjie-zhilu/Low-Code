@@ -1,5 +1,5 @@
 import { ElMessage } from "element-plus"
-import { onUnmounted, ref } from "vue"
+import { onUnmounted } from "vue"
 import emitter from "./bus"
 import { deepcopy } from "./deepcopy"
 import type { Command, ElementItem, State } from "@/interface"
@@ -35,6 +35,7 @@ export function registerCommand(elements) {
 
             stack.push({ redo, undo })
             state.current = current + 1
+            emitter.emit('updateState')
         }
     }
 
@@ -50,6 +51,7 @@ export function registerCommand(elements) {
                         item.redo && item.redo()
                         state.current++
                         ElMessage.success('重做成功')
+                        emitter.emit('updateState')
                     } else {
                         ElMessage.error('没有可重做的操作')
                     }
@@ -74,6 +76,7 @@ export function registerCommand(elements) {
                         item.undo && item.undo()
                         state.current--
                         ElMessage.success('撤销成功')
+                        emitter.emit('updateState')
                     } else {
                         ElMessage.error('没有可撤销的操作')
                     }
