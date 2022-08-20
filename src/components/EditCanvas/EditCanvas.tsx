@@ -1,12 +1,11 @@
 import { computed, defineComponent, ref, StyleValue } from 'vue'
 import type { Ref } from 'vue'
-import { ElementItem, CanvasStore, ElementsStore } from '../../interface'
 import { Element } from '../'
 import { useCanvasStore, useElementsStore } from '@/store'
 import './EditCanvas.scss'
 import emitter from '@/utils/bus'
 import useMove from '@/utils/useMove'
-import { Pos } from '@/interface/data'
+import type { ElementItem, CanvasStore, ElementsStore, Pos } from '@/interface'
 
 export default defineComponent({
     setup() {
@@ -46,12 +45,14 @@ export default defineComponent({
                 <div class="element-content"
                     style={canvasStyle.value as StyleValue}
                     ref={contentRef}
+                    // @ts-ignore
                     onmousedown={elements.clearFocus}>
                     {
                         (elementsList.map(item => 
                             <Element
                                 class={item.focus ? 'element-focus' : ''}
                                 data={item}
+                                // @ts-ignore
                                 draggable
                                 onmousedown={(e) => elementMouseDown(e, item)}
                                 onmouseup={(e) => elementMouseUp(e, item)}

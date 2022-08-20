@@ -1,7 +1,6 @@
-import { Pos } from '@/interface/data'
 import throttle from '@/utils/throttle'
 import { Ref } from 'vue'
-import { CanvasStore, ElementItem, ElementsStore } from '@/interface'
+import { CanvasStore, ElementItem, ElementsStore, Pos } from '@/interface'
 
 interface Lines {
     X: Array < {

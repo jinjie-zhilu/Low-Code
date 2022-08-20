@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject } from 'vue'
-import { ComponentRegisty, ElementItem } from '../../interface'
+import { ComponentRegisty, ElementItem } from '@/interface'
 import type { PropType } from 'vue'
 
 export default defineComponent({

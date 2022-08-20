@@ -58,7 +58,10 @@ export interface Command {
     keyboard?: string,
     pushStack?: boolean,
     init?: Function,
-    execute: Function
+    execute(): {
+        redo: () => void,
+        undo?: () => void
+    }
 }
 
 // 命令注册表

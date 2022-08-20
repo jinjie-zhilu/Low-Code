@@ -55,9 +55,9 @@ import { Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { ComponentList, EditCanvas, ConfigMenu } from '../components'
-import { ElementsStore } from "@/interface"
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { registerCommand } from '@/utils/registerCommand'
+import type { ElementsStore } from "@/interface"
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()

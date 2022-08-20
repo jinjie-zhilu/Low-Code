@@ -1,7 +1,7 @@
-import { ElementItem, ComponentRegisty } from "@/interface"
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 import emitter from './bus'
+import type { ElementItem, ComponentRegisty } from "@/interface"
 
 export default function userDragger(elements, components: ComponentRegisty) {
 

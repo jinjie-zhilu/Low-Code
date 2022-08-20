@@ -1,8 +1,8 @@
-import { Command, ElementItem, State } from "@/interface/data"
 import { ElMessage } from "element-plus"
 import { onUnmounted, ref } from "vue"
 import emitter from "./bus"
 import { deepcopy } from "./deepcopy"
+import type { Command, ElementItem, State } from "@/interface"
 
 export function registerCommand(elements) {
     const state: State = {
@@ -93,6 +93,7 @@ export function registerCommand(elements) {
                 this.before = deepcopy(elements.elements)
             }
             const end: () => void = () => {
+                // @ts-ignore
                 state.commands.action()
             }
             emitter.on('actionStart', start)

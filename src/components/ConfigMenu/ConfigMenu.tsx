@@ -1,10 +1,9 @@
-import { useCanvasStore, useElementsStore } from "@/store";
-import { ElCollapse, ElCollapseItem, ElColorPicker, ElForm, ElFormItem, ElInput } from "element-plus";
-import { ref, defineComponent } from "vue";
-import type { Ref } from "vue";
-import { computed } from "vue";
-import { Store } from "pinia";
-import { CanvasStore, ElementsStore } from "@/interface";
+import { useCanvasStore, useElementsStore } from "@/store"
+import { ElCollapse, ElCollapseItem, ElColorPicker, ElForm, ElFormItem, ElInput } from "element-plus"
+import { ref, defineComponent } from "vue"
+import type { Ref } from "vue"
+import { computed } from "vue"
+import type { CanvasStore, ElementsStore } from "@/interface"
 
 export default defineComponent({
     setup() {

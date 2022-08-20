@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ElementItem, ElementsStore } from "@/interface"
+import type { ElementItem, ElementsStore } from "@/interface"
 
 export const useElementsStore: () => ElementsStore = defineStore('elements', {  
     state: () => {

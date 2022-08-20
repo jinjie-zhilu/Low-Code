@@ -3,7 +3,10 @@ import {
     ComponentRegisty,
     Canvas,
     ElementItem,
-    EditData
+    EditData,
+    Pos,
+    Command,
+    State
 } from "./data"
 import {
     CanvasStore,
@@ -17,5 +20,8 @@ export type {
     ElementItem,
     EditData,
     CanvasStore,
-    ElementsStore
+    ElementsStore,
+    Command,
+    State,
+    Pos
 }
