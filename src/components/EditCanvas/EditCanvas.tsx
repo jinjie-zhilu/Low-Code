@@ -1,23 +1,24 @@
 import { computed, defineComponent, ref, StyleValue } from 'vue'
 import type { Ref } from 'vue'
-import { Element } from '../'
 import { useCanvasStore, useElementsStore } from '@/store'
 import './EditCanvas.scss'
 import emitter from '@/utils/bus'
 import useMove from '@/utils/useMove'
 import type { ElementItem, CanvasStore, ElementsStore, Pos } from '@/interface'
+import { renderElement } from './renderElement'
 
 export default defineComponent({
     setup() {
         // 处理数据
         let canvas: CanvasStore = useCanvasStore()
         let elements: ElementsStore = useElementsStore()
-        let elementsList: Array<ElementItem> = elements.elements
+
         // 对齐线
         let snapline: Ref<Pos> = ref({
             X: null,
             Y: null
         })
+
         // 是否处于移动状态
         let isMove: Ref<boolean> = ref(false)
 
@@ -34,10 +35,29 @@ export default defineComponent({
 
         // 提供画布的 ref
         const contentRef: Ref<any> = ref()
-        emitter.emit("event", contentRef)
+        emitter.emit("contentRef", contentRef)
 
         // 引入移动函数
         const { elementMouseDown, elementMouseUp } = useMove(elements, canvas, snapline, isMove)
+
+        function CanvasContent(elements: Array<ElementItem>) {
+            console.log('渲染',elements);
+            
+            let render = (elements.map(item =>
+                // <Element
+                //     class={item.focus ? 'element-focus' : ''}
+                //     data={item}
+                //     // @ts-ignore
+                //     draggable
+                //     onmousedown={(e) => elementMouseDown(e, item)}
+                //     onmouseup={(e) => elementMouseUp(e, item)}
+                // ></Element>
+
+                renderElement(item, elementMouseDown, elementMouseUp)
+            ))
+            console.log(render);
+            return render
+        }
 
         // 生成模板
         return () => (
@@ -48,16 +68,7 @@ export default defineComponent({
                     // @ts-ignore
                     onmousedown={elements.clearFocus}>
                     {
-                        (elementsList.map(item => 
-                            <Element
-                                class={item.focus ? 'element-focus' : ''}
-                                data={item}
-                                // @ts-ignore
-                                draggable
-                                onmousedown={(e) => elementMouseDown(e, item)}
-                                onmouseup={(e) => elementMouseUp(e, item)}
-                            ></Element>
-                        ))
+                        CanvasContent(elements.elements)
                     }
                     {isMove.value && snapline.value.X !== null && <div class='line-x' style={{ left: `${snapline.value.X}px` }}></div>}
                     {isMove.value && snapline.value.Y !== null && <div class='line-y' style={{ top: `${snapline.value.Y}px` }}></div>}

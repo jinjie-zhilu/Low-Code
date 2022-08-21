@@ -7,7 +7,7 @@ export default function userDragger(elements, components: ComponentRegisty) {
 
     // 获取画布ref
     let contentRef: Ref<any> = ref()
-    emitter.on("event", e => {
+    emitter.on("contentRef", e => {
         contentRef = e as Ref<any>
     })
 

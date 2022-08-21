@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { ElementItem, ElementsStore } from "@/interface"
+import { deepcopy } from '@/utils/deepcopy'
 
 export const useElementsStore: () => ElementsStore = defineStore('elements', {  
     state: () => {
@@ -65,7 +66,13 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
                         index = idx
                 })
 
-                console.log(this.elements.splice(index, 1))
+                let temp = deepcopy(this.elements)
+                let deltemp = temp.splice(index, 1)
+                this.$patch({
+                    sum: this.sum,
+                    elements: temp
+                })
+                console.log(this.elements, deltemp, temp)
             })
         }
     }

@@ -272,8 +272,10 @@ export default function userMove(
     const elementMouseUp = (e, item) => {
         // 移动不改变选中状态
         if (isMove.value) {
+            mouseUp(e)
             return
         }
+        mouseUp(e)
 
         // 当前选中有非自身元素且没有按下 Ctrl 键时清空 focus
         if (focusElements.length && !rawFocus && !e.ctrlKey) {
