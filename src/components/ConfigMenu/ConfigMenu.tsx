@@ -22,7 +22,12 @@ export default defineComponent({
             if (elements.focusElements.focus.length === 1) {
                 let focus = elements.focusElements.focus[0]
 
-                focusId.value = focus.id
+                elements.elements.forEach((item, index) => {
+                    if (item.id === focus.id) {
+                        focusId.value = index
+                        return
+                    }
+                })
                 if (focusId.value > elements.focusElements.focus.length) {
                     return 'canvas'
                 }
