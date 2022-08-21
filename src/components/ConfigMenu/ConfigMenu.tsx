@@ -36,6 +36,15 @@ export default defineComponent({
         })
 
         // 个别组件单独设置
+        //输入框
+        let currentFocusInput: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'wenbenkuang') {
+                return 'input'
+            } else {
+                return 'canvas'
+            }
+        })
+
         // 图片
         let currentFocusImage: Ref<string> = computed(() => {
             if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'image') {
@@ -177,6 +186,19 @@ export default defineComponent({
                         </ElFormItem>
                     </ElForm>
             },
+            input: {
+                title: '输入框属性',
+                form:
+                    <ElForm>
+                        <ElFormItem label="Type">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].inputType}
+                                onChange={update}
+                            >
+                            </ElInput>
+                        </ElFormItem>
+                    </ElForm>,
+            },
             image: {
                 title: '图片设置',
                 form:
@@ -187,7 +209,6 @@ export default defineComponent({
                                 type="textarea"
                                 onChange={update}
                             />
-                            {/*<ElInput type="file" v-model={elements.elements[focusId.value].img}></ElInput>*/}
                         </ElFormItem>
                     </ElForm>,
             },
@@ -204,6 +225,19 @@ export default defineComponent({
                             name="baseConfig"
                         >
                             {baseConfigMenu[currentFocus.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
+
+                {/*输入框*/}
+                <div class="config-box"
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "wenbenkuang" && elements.focusElements.focus.length === 1}>
+                    <ElCollapse v-model={configCollapse.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusInput.value].title}</h4>}}
+                            name="baseConfig1"
+                        >
+                            {baseConfigMenu[currentFocusInput.value].form}
                         </ElCollapseItem>
                     </ElCollapse>
                 </div>

@@ -28,6 +28,7 @@ export interface ElementItem {
     color: string,
     img: string,
     video: string,
+    inputType: string,
     render?: Function
 }
 

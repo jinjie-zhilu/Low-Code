@@ -58,9 +58,12 @@ registry.register({
     zIndex: 0,
     fontSize: 14,
     color: "#333",
+    inputType: "",
     render: (data) => <input style={{
-        lineHeight: `${data.height}px`
-    }} placeholder={data.label}></input>
+        lineHeight: `${data.height}px`,
+        width: `${data.width}px`,
+        height: `${data.height}px`
+    }} placeholder={data.label} type={data.inputType}></input>
 })
 
 registry.register({

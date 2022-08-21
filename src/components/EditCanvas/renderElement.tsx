@@ -13,7 +13,8 @@ export function renderElement(state: string, data: ElementItem, elementMouseDown
         fontSize: `${data.fontSize}px`,
         color: data.color,
         img: data.img,
-        video: data.video
+        video: data.video,
+        inputType: data.inputType,
     }))
 
     // 获取组件信息
