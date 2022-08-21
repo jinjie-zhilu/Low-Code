@@ -41,21 +41,9 @@ export default defineComponent({
         const { elementMouseDown, elementMouseUp } = useMove(elements, canvas, snapline, isMove)
 
         function CanvasContent(elements: Array<ElementItem>) {
-            console.log('渲染',elements);
-            
             let render = (elements.map(item =>
-                // <Element
-                //     class={item.focus ? 'element-focus' : ''}
-                //     data={item}
-                //     // @ts-ignore
-                //     draggable
-                //     onmousedown={(e) => elementMouseDown(e, item)}
-                //     onmouseup={(e) => elementMouseUp(e, item)}
-                // ></Element>
-
                 renderElement(item, elementMouseDown, elementMouseUp)
             ))
-            console.log(render);
             return render
         }
 

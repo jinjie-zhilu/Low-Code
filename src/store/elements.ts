@@ -61,7 +61,6 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
             elements.forEach((item) => {
                 let index: number = 0
                 this.elements.forEach((element, idx) => {
-                    console.log(index)
                     if (element.id == item.id) 
                         index = idx
                 })
@@ -72,7 +71,6 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
                     sum: this.sum,
                     elements: temp
                 })
-                console.log(this.elements, deltemp, temp)
             })
         }
     }

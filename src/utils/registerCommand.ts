@@ -1,4 +1,4 @@
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { onUnmounted } from "vue"
 import emitter from "./bus"
 import { deepcopy } from "./deepcopy"
@@ -19,6 +19,7 @@ export function registerCommand(elements) {
 
     const registry: (command: Command) => void = (command: Command) => {
         state.commandArray.push(command)
+        // @ts-ignore
         state.commands[command.key] = () => {
             const { redo, undo } = command.execute()
             
@@ -85,6 +86,94 @@ export function registerCommand(elements) {
         }
     })
 
+    // 删除命令
+    registry({
+        key: 'deleteElement',
+        keyboard: 'Delete',
+        execute() {
+            return {
+                redo() {
+                    // 获取删除元素
+                    let deleteElements: Array<ElementItem> = deepcopy(elements.focusElements.focus)
+                    let elementsList: string = ''
+                    deleteElements.forEach((item) => {
+                        elementsList += `[${item.key}]-${item.id} `
+                    })
+
+                    // 提示
+                    ElMessageBox.confirm(
+                        `将删除元素: { ${elementsList}}，是否继续?`,
+                        '警告',
+                        {
+                            confirmButtonText: '确认删除',
+                            cancelButtonText: '取消',
+                            type: 'warning',
+                        }
+                    ).then(() => {
+                        // 发布删除开始事件
+                        emitter.emit('actionStart')
+
+                        // 删除
+                        elements.delete(deleteElements)
+                        ElMessage({
+                            type: 'success',
+                            message: '删除成功',
+                        })
+
+                        // 发布删除结束事件
+                        emitter.emit('actionEnd')
+                    })
+                    .catch(() => {
+                        ElMessage({
+                            type: 'info',
+                            message: '取消删除',
+                        })
+                    })
+                }
+            }
+        }
+    })
+
+    // 清空命令
+    registry({
+        key: 'clearCanvas',
+        keyboard: 'ctrl+Delete',
+        execute() {
+            return {
+                redo() {
+                    ElMessageBox.confirm(
+                        '将清空画布中的所有元素，是否继续?',
+                        '警告',
+                        {
+                            confirmButtonText: '确认删除',
+                            cancelButtonText: '取消',
+                            type: 'warning',
+                        }
+                    ).then(() => {
+                        // 发布删除开始事件
+                        emitter.emit('actionStart')
+
+                        // 删除
+                        elements.clearAll()
+                        ElMessage({
+                            type: 'success',
+                            message: '删除成功',
+                        })
+
+                        // 发布删除结束事件
+                        emitter.emit('actionEnd')
+                    })
+                    .catch(() => {
+                        ElMessage({
+                            type: 'info',
+                            message: '取消删除',
+                        })
+                    })
+                }
+            }
+        }
+    })
+
     // action 操作
     registry({
         key: 'action',
@@ -121,18 +210,20 @@ export function registerCommand(elements) {
         }
     })
         
+    // 注册快捷键
     const keyboardEvent = (() => {
         const onKeydown = (e: KeyboardEvent) => {
             const { ctrlKey, key } = e
-            let keyString: string = ctrlKey ? `ctrl+${key}` : ''
+            let keyString: string = ctrlKey ? `ctrl+${key}` : key
+            
             if (keyString) {
                 state.commandArray.forEach(({ keyboard, key }) => {
                     if (keyboard === keyString) {
+                        // @ts-ignore
                         state.commands[key]()
                         e.preventDefault()
-                   }
+                    }
                })
-                
             }
         }
         const init = () => {

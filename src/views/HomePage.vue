@@ -77,7 +77,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { registerCommand } from '@/utils/registerCommand'
 import type { ElementItem, ElementsStore, State } from "@/interface"
 import emitter from '@/utils/bus'
-import { log } from 'console'
 import { deepcopy } from '@/utils/deepcopy'
 
 // 获取画布元素列表
@@ -87,7 +86,7 @@ let elements: ElementsStore = useElementsStore()
 let state: State = reactive(registerCommand(elements))
 
 // 撤回/重做
-let { undo, redo } = state.commands
+let { undo, redo, deleteElement, clearCanvas } = state.commands
 
 // 黑夜模式
 const isDark: WritableComputedRef<boolean> = useDark()
@@ -101,75 +100,6 @@ const updateState = () => {
     state.current--
 }
 emitter.on('updateState', updateState)
-
-// 清空画布方法
-const clearCanvas:() => void = () => {
-    ElMessageBox.confirm(
-        '将清空画布中的所有元素，是否继续?',
-        '警告',
-        {
-            confirmButtonText: '确认删除',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    ).then(() => {
-        // 发布删除开始事件
-        emitter.emit('actionStart')
-
-        // 删除
-        elements.clearAll()
-        ElMessage({
-            type: 'success',
-            message: '删除成功',
-        })
-
-        // 发布删除结束事件
-        emitter.emit('actionEnd')
-    })
-    .catch(() => {
-        ElMessage({
-            type: 'info',
-            message: '取消删除',
-        })
-    })
-}
-
-// 删除元素方法
-const deleteElement: () => void = () => {
-    let deleteElements: Array<ElementItem> = deepcopy(elements.focusElements.focus)
-    let elementsList: string = ''
-    deleteElements.forEach((item) => {
-        elementsList += `[${item.key}]-${item.id} `
-    })
-    ElMessageBox.confirm(
-        `将删除元素: { ${elementsList}}，是否继续?`,
-        '警告',
-        {
-            confirmButtonText: '确认删除',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    ).then(() => {
-        // 发布删除开始事件
-        emitter.emit('actionStart')
-
-        // 删除
-        elements.delete(deleteElements)
-        ElMessage({
-            type: 'success',
-            message: '删除成功',
-        })
-
-        // 发布删除结束事件
-        emitter.emit('actionEnd')
-    })
-    .catch(() => {
-        ElMessage({
-            type: 'info',
-            message: '取消删除',
-        })
-    })
-}
 
 </script>
 
