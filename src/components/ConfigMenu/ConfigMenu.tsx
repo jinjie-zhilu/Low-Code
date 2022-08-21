@@ -28,9 +28,6 @@ export default defineComponent({
                         return
                     }
                 })
-                if (focusId.value > elements.focusElements.focus.length) {
-                    return 'canvas'
-                }
                 
                 baseConfigMenu.general.title = `[${focus.key}]${focus.id}-样式`
                 return 'general'
