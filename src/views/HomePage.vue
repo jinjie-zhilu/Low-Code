@@ -24,7 +24,7 @@
                 <div class="divider"></div>
                 <el-button-group>
                     <el-button @click="previewDialog =true">预览</el-button>
-                    <el-button>截图</el-button>
+                    <el-button @click="getShots">截图</el-button>
                     <el-button>导出</el-button>
                 </el-button-group>
                 <div class="divider"></div>
@@ -52,29 +52,27 @@
                 </el-aside>
             </el-container>
         </el-container>
-        <el-dialog 
-        custom-class="preview-dialog"
-        v-model="previewDialog"
-        title="预览窗口"
-        width="80%"
-        top="calc(4vh + 20px)"
-        destroy-on-close
-        >
+        <el-dialog custom-class="preview-dialog" v-model="previewDialog" title="预览窗口" width="80%"
+            top="calc(4vh + 20px)">
             <el-scrollbar class="canvas-block flex-center">
-                <EditCanvas state="preview"></EditCanvas>
+                <div id="preview_canvas">
+                    <EditCanvas state="preview"></EditCanvas>
+                </div>
             </el-scrollbar>
         </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, Ref, ref, WritableComputedRef } from 'vue'
+import { ComponentInternalInstance, getCurrentInstance, reactive, Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
+import { screenshots } from '@/utils/screenshots'
 import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
 import { registerCommand } from '@/utils/registerCommand'
 import type { ElementItem, ElementsStore, State } from "@/interface"
 import emitter from '@/utils/bus'
+import { log } from 'console'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
@@ -95,11 +93,21 @@ const toggleDark: (value?: boolean) => boolean = useToggle(isDark)
 // 主题切换
 let themeSelector: Ref<boolean> = ref(isDark.value)
 
-const updateState = () => {
+// 更新状态
+const updateState: () => void = () => {
     state.current++
     state.current--
 }
 emitter.on('updateState', updateState)
+
+// 截图
+const getShots: () => void = () => {
+    previewDialog.value = true
+    setTimeout(() => {
+        const preview_canvas: HTMLElement = document.getElementById('preview_canvas')
+        screenshots(preview_canvas)
+    }, 500)
+}
 
 </script>
 
