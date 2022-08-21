@@ -42,7 +42,7 @@ export default defineComponent({
         // 个别组件单独设置
         // 图片
         let currentFocusImage: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value]) {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'image') {
                 return 'image'
             } else {
                 return 'canvas'
