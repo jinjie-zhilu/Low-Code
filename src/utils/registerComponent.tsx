@@ -46,7 +46,7 @@ registry.register({
     zIndex: 0,
     fontSize: 14,
     color: "#333",
-    render: (data) => <ElButton>{ data.label }</ElButton>
+    render: (data) => <button class='el-button'>{ data.label }</button>
 })
 
 registry.register({

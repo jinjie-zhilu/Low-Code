@@ -25,8 +25,6 @@ export function screenshots(canvasRef) {
     html2canvas(canvasRef, opts).then(canvas => {
         // DOM 转为 canvas
         let context: CanvasRenderingContext2D = canvas.getContext('2d')
-        console.log(context);
-        
 
         // 关闭抗锯齿
         context.imageSmoothingEnabled = false
