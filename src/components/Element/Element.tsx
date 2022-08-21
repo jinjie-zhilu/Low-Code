@@ -18,7 +18,9 @@ export default defineComponent({
             height: `${data.height}px`,
             zIndex: data.zIndex,
             fontSize: `${data.fontSize}px`,
-            color: data.color
+            color: data.color,
+            img: data.img,
+            video: data.video
         }))
 
         // 获取组件信息

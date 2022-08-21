@@ -179,6 +179,8 @@ export default function userMove(
                     fontSize: 14,
                     focus: false,
                     color: '#fff',
+                    img: "",
+                    video: "",
                     width: canvas.width,
                     height: canvas.height
                 })

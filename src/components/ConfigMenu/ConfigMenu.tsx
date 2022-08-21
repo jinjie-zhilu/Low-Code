@@ -1,9 +1,9 @@
-import { useCanvasStore, useElementsStore } from "@/store"
-import { ElCollapse, ElCollapseItem, ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber } from "element-plus"
-import { ref, defineComponent } from "vue"
-import type { Ref } from "vue"
-import { computed } from "vue"
-import type { CanvasStore, ElementsStore } from "@/interface"
+import {useCanvasStore, useElementsStore} from "@/store"
+import {ElCollapse, ElCollapseItem, ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber} from "element-plus"
+import {ref, defineComponent, watch} from "vue"
+import type {Ref} from "vue"
+import {computed} from "vue"
+import type {CanvasStore, ElementsStore} from "@/interface"
 import emitter from "@/utils/bus"
 import "./ConfigMenu.css"
 
@@ -21,7 +21,7 @@ export default defineComponent({
         let currentFocus: Ref<string> = computed(() => {
             if (elements.focusElements.focus.length === 1) {
                 let focus = elements.focusElements.focus[0]
-                
+
                 focusId.value = focus.id
                 baseConfigMenu.general.title = `[${focus.key}]${focus.id}-样式`
                 return 'general'
@@ -30,11 +30,21 @@ export default defineComponent({
             }
         })
 
+        // 个别组件单独设置
+        // 图片
+        let currentFocusImage: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value]) {
+                return 'image'
+            } else {
+                return 'canvas'
+            }
+        })
+
         // 表单更新
         const update = (value) => {
-            
+
         }
-        
+
         // 基础属性配置表单
         const baseConfigMenu = {
             canvas: {
@@ -42,7 +52,7 @@ export default defineComponent({
                 form:
                     <ElForm label-position="left" label-width="100px" model={canvas} style="max-width: 100%">
                         <ElFormItem label="画布背景">
-                            <ElColorPicker v-model={canvas.bgColor} />
+                            <ElColorPicker v-model={canvas.bgColor}/>
                         </ElFormItem>
                         <ElFormItem label="画布宽度">
                             <div class="input-number">
@@ -158,22 +168,53 @@ export default defineComponent({
                             </div>
                         </ElFormItem>
                         <ElFormItem label="字体颜色">
-                            <ElColorPicker v-model={elements.elements[focusId.value].color} />
+                            <ElColorPicker v-model={elements.elements[focusId.value].color}/>
                         </ElFormItem>
                     </ElForm>
-            }
+            },
+            image: {
+                title: '图片设置',
+                form:
+                    <ElForm>
+                        <ElFormItem label="输入图片地址">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].img}
+                                type="textarea"
+                                onChange={update}
+                            />
+                            {/*<ElInput type="file" v-model={elements.elements[focusId.value].img}></ElInput>*/}
+                        </ElFormItem>
+                    </ElForm>,
+            },
         }
 
+
         return () => (
-            <div class="config-box">
-                <ElCollapse v-model={configCollapse.value} accordion>
-                    <ElCollapseItem
-                        v-slots={{ title: () => <h4>{baseConfigMenu[currentFocus.value].title }</h4> }}
-                        name="baseConfig"
-                    >
-                        {baseConfigMenu[currentFocus.value].form}
-                    </ElCollapseItem>
-                </ElCollapse>
+            <div>
+                {/*基础样式*/}
+                <div class="config-box">
+                    <ElCollapse v-model={configCollapse.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocus.value].title}</h4>}}
+                            name="baseConfig"
+                        >
+                            {baseConfigMenu[currentFocus.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
+
+                {/*图片*/}
+                <div class="config-box"
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "image" && elements.focusElements.focus.length === 1}>
+                    <ElCollapse v-model={configCollapse.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusImage.value].title}</h4>}}
+                            name="baseConfig1"
+                        >
+                            {baseConfigMenu[currentFocusImage.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
             </div>
         )
     }

@@ -48,3 +48,51 @@ registry.register({
     color: "#333",
     render: (data) => <ElButton>{ data.label }</ElButton>
 })
+
+registry.register({
+    key: 'wenbenkuang',
+    label: '输入框',
+    focus: false,
+    width: 180,
+    height: 32,
+    zIndex: 0,
+    fontSize: 14,
+    color: "#333",
+    render: (data) => <input style={{
+        lineHeight: `${data.height}px`
+    }} placeholder={data.label}></input>
+})
+
+registry.register({
+    key: 'image',
+    label: '图片',
+    focus: false,
+    width: 192,
+    height: 108,
+    zIndex: 0,
+    fontSize: 14,
+    color: "#333",
+    img: "https://www.pics.fineyh.com/images/2022/08/20/202208201641833.png",
+    render: (data) => <img src={data.img}
+                           style={{
+                               width: `${data.width}px`,
+                               height: `${data.height}px`
+    }}></img>
+})
+
+registry.register({
+    key: 'video-o',
+    label: '视频',
+    focus: false,
+    width: 192,
+    height: 108,
+    zIndex: 0,
+    fontSize: 14,
+    color: "#333",
+    video: "https://www.w3schools.com/html/movie.mp4",
+    render: (data) => <video src={data.video}
+                           style={{
+                               width: `${data.width}px`,
+                               height: `${data.height}px`
+                           }}></video>
+})

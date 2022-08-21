@@ -26,6 +26,8 @@ export interface ElementItem {
     zIndex: number,
     fontSize: number,
     color: string,
+    img: string,
+    video: string,
     render?: Function
 }
 
