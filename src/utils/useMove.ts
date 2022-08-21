@@ -181,6 +181,7 @@ export default function userMove(
                     color: '#fff',
                     img: "",
                     video: "",
+                    inputType: "",
                     width: canvas.width,
                     height: canvas.height
                 })
