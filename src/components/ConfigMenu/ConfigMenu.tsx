@@ -4,7 +4,6 @@ import {ref, defineComponent, watch} from "vue"
 import type {Ref} from "vue"
 import {computed} from "vue"
 import type {CanvasStore, ElementsStore} from "@/interface"
-import emitter from "@/utils/bus"
 import "./ConfigMenu.css"
 
 export default defineComponent({

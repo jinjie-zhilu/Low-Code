@@ -4,27 +4,14 @@
             <!-- 顶部工具栏 -->
             <el-header class="topbar">
                 <el-button-group>
-                    <el-button 
-                    :disabled="state.current < 0" 
-                    title="撤销"
-                    @click="undo"
-                    ><i class="iconfont icon-undo"></i>
+                    <el-button :disabled="state.current < 0" title="撤销" @click="undo"><i class="iconfont icon-undo"></i>
                     </el-button>
-                    <el-button 
-                    :disabled="state.current > state.stack.length - 2" 
-                    title="重做"
-                    @click="redo"
-                    ><i class="iconfont icon-redo"></i>
+                    <el-button :disabled="state.current > state.stack.length - 2" title="重做" @click="redo"><i
+                            class="iconfont icon-redo"></i>
                     </el-button>
-                    <el-button 
-                    title="删除组件" 
-                    @click="deleteElement"
-                    ><i class="iconfont icon-delete"></i>
+                    <el-button title="删除组件" @click="deleteElement"><i class="iconfont icon-delete"></i>
                     </el-button>
-                    <el-button 
-                    title="清空画布" 
-                    @click="clearCanvas"
-                    ><i class="iconfont icon-clear"></i>
+                    <el-button title="清空画布" @click="clearCanvas"><i class="iconfont icon-clear"></i>
                     </el-button>
                 </el-button-group>
                 <div class="divider"></div>
@@ -36,7 +23,7 @@
                 </el-button-group>
                 <div class="divider"></div>
                 <el-button-group>
-                    <el-button>预览</el-button>
+                    <el-button @click="previewDialog =true">预览</el-button>
                     <el-button>截图</el-button>
                     <el-button>导出</el-button>
                 </el-button-group>
@@ -55,7 +42,7 @@
                     <!-- 画布 -->
                     <el-main class="canvas-box">
                         <el-scrollbar class="canvas-block">
-                            <EditCanvas></EditCanvas>
+                            <EditCanvas state="edit"></EditCanvas>
                         </el-scrollbar>
                     </el-main>
                 </el-container>
@@ -65,6 +52,18 @@
                 </el-aside>
             </el-container>
         </el-container>
+        <el-dialog 
+        custom-class="preview-dialog"
+        v-model="previewDialog"
+        title="预览窗口"
+        width="80%"
+        top="calc(4vh + 20px)"
+        destroy-on-close
+        >
+            <el-scrollbar class="canvas-block flex-center">
+                <EditCanvas state="preview"></EditCanvas>
+            </el-scrollbar>
+        </el-dialog>
     </div>
 </template>
 
@@ -73,11 +72,9 @@ import { reactive, Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { registerCommand } from '@/utils/registerCommand'
 import type { ElementItem, ElementsStore, State } from "@/interface"
 import emitter from '@/utils/bus'
-import { deepcopy } from '@/utils/deepcopy'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
@@ -87,6 +84,9 @@ let state: State = reactive(registerCommand(elements))
 
 // 撤回/重做
 let { undo, redo, deleteElement, clearCanvas } = state.commands
+
+// 显示预览窗口
+let previewDialog: Ref<boolean> = ref(false)
 
 // 黑夜模式
 const isDark: WritableComputedRef<boolean> = useDark()

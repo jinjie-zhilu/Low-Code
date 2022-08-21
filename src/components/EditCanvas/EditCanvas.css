@@ -6,7 +6,7 @@
   position: absolute;
 }
 
-.element-content .element-item::after {
+.element-content.edit > .element-item::after {
   content: '';
   position: absolute;
   top: 0;
