@@ -13,6 +13,7 @@ export default defineComponent({
         let canvas: CanvasStore = useCanvasStore()
         // 折叠面板显示内容
         let configCollapse: Ref<string> = ref('baseConfig')
+        let configCollapse1: Ref<string> = ref('baseConfig1')
         // 当前选中的元素 id
         let focusId: Ref<number> = ref(0)
 
@@ -35,7 +36,25 @@ export default defineComponent({
             }
         })
 
-        // 个别组件单独设置
+        // 各个组件单独设置
+        //文本
+        let currentFocusText: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'text') {
+                return 'text'
+            } else {
+                return 'canvas'
+            }
+        })
+
+        //按钮
+        let currentFocusBtn: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'btn') {
+                return 'btn'
+            } else {
+                return 'canvas'
+            }
+        })
+
         //输入框
         let currentFocusInput: Ref<string> = computed(() => {
             if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'wenbenkuang') {
@@ -49,6 +68,15 @@ export default defineComponent({
         let currentFocusImage: Ref<string> = computed(() => {
             if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'image') {
                 return 'image'
+            } else {
+                return 'canvas'
+            }
+        })
+
+        //视频
+        let currentFocusVideo: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'video-o') {
+                return 'video'
             } else {
                 return 'canvas'
             }
@@ -131,13 +159,6 @@ export default defineComponent({
                                 <span class='unit'>px</span>
                             </div>
                         </ElFormItem>
-                        <ElFormItem label="文本内容">
-                            <ElInput
-                                v-model={elements.elements[focusId.value].label}
-                                type="textarea"
-                                onChange={update}
-                            />
-                        </ElFormItem>
                         <ElFormItem label="控件宽度">
                             <div class="input-number">
                                 <ElInputNumber
@@ -170,6 +191,24 @@ export default defineComponent({
                                 />
                             </div>
                         </ElFormItem>
+                    </ElForm>
+            },
+            text: {
+                title: '文本属性',
+                form:
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="文本内容">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].label}
+                                type="textarea"
+                                onChange={update}
+                            />
+                        </ElFormItem>
                         <ElFormItem label="字号">
                             <div class="input-number">
                                 <ElInputNumber
@@ -186,11 +225,41 @@ export default defineComponent({
                         </ElFormItem>
                     </ElForm>
             },
+            btn: {
+                title: '按钮属性',
+                form:
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="按钮内容">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].label}
+                                type="textarea"
+                                onChange={update}
+                            />
+                        </ElFormItem>
+                    </ElForm>
+            },
             input: {
                 title: '输入框属性',
                 form:
-                    <ElForm>
-                        <ElFormItem label="Type">
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="提示信息">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].label}
+                                type="textarea"
+                                onChange={update}
+                            />
+                        </ElFormItem>
+                        <ElFormItem label="类型 Type">
                             <ElInput
                                 v-model={elements.elements[focusId.value].inputType}
                                 onChange={update}
@@ -200,12 +269,35 @@ export default defineComponent({
                     </ElForm>,
             },
             image: {
-                title: '图片设置',
+                title: '图片属性',
                 form:
-                    <ElForm>
-                        <ElFormItem label="输入图片地址">
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="图片地址">
                             <ElInput
                                 v-model={elements.elements[focusId.value].img}
+                                type="textarea"
+                                onChange={update}
+                            />
+                        </ElFormItem>
+                    </ElForm>,
+            },
+            video: {
+                title: '视频属性',
+                form:
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="视频地址">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].video}
                                 type="textarea"
                                 onChange={update}
                             />
@@ -228,11 +320,34 @@ export default defineComponent({
                         </ElCollapseItem>
                     </ElCollapse>
                 </div>
-
+                {/*文本*/}
+                <div class="config-box"
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "text" && elements.focusElements.focus.length === 1}>
+                    <ElCollapse v-model={configCollapse1.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusText.value].title}</h4>}}
+                            name="baseConfig1"
+                        >
+                            {baseConfigMenu[currentFocusText.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
+                {/*按钮*/}
+                <div class="config-box"
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "btn" && elements.focusElements.focus.length === 1}>
+                    <ElCollapse v-model={configCollapse1.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusBtn.value].title}</h4>}}
+                            name="baseConfig1"
+                        >
+                            {baseConfigMenu[currentFocusBtn.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
                 {/*输入框*/}
                 <div class="config-box"
                      v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "wenbenkuang" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse.value} accordion>
+                    <ElCollapse v-model={configCollapse1.value} accordion>
                         <ElCollapseItem
                             v-slots={{title: () => <h4>{baseConfigMenu[currentFocusInput.value].title}</h4>}}
                             name="baseConfig1"
@@ -241,16 +356,27 @@ export default defineComponent({
                         </ElCollapseItem>
                     </ElCollapse>
                 </div>
-
                 {/*图片*/}
                 <div class="config-box"
                      v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "image" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse.value} accordion>
+                    <ElCollapse v-model={configCollapse1.value} accordion>
                         <ElCollapseItem
                             v-slots={{title: () => <h4>{baseConfigMenu[currentFocusImage.value].title}</h4>}}
                             name="baseConfig1"
                         >
                             {baseConfigMenu[currentFocusImage.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
+                {/*视频*/}
+                <div class="config-box"
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "video-o" && elements.focusElements.focus.length === 1}>
+                    <ElCollapse v-model={configCollapse1.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusVideo.value].title}</h4>}}
+                            name="baseConfig1"
+                        >
+                            {baseConfigMenu[currentFocusVideo.value].form}
                         </ElCollapseItem>
                     </ElCollapse>
                 </div>
