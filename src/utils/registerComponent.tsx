@@ -30,10 +30,14 @@ registry.register({
     height: 22,
     zIndex: 0,
     fontSize: 14,
+    fontFamily: "",
     color: "#333",
+    background: "",
     render: (data) => <p style={{
         textAlign: 'center',
-        lineHeight: `${data.height}px`
+        lineHeight: `${data.height}px`,
+        fontFamily: `${data.fontFamily}`,
+        background: `${data.background}`,
     }}>{data.label}</p>
 })
 
@@ -45,8 +49,14 @@ registry.register({
     height: 32,
     zIndex: 0,
     fontSize: 14,
+    fontFamily: "",
     color: "#606266",
-    render: (data) => <button style={{ width: '100%', height: '100%' }} class='el-buttons'>{data.label}</button>
+    borderRadius: 5,
+    render: (data) => <button style={{
+        width: '100%', height: '100%',
+        fontFamily: `${data.fontFamily}`,
+        borderRadius: `${data.borderRadius}px`,
+    }} class='el-buttons'>{data.label}</button>
 })
 
 registry.register({
@@ -59,10 +69,12 @@ registry.register({
     fontSize: 14,
     color: "#333",
     inputType: "",
+    borderRadius: 5,
     render: (data) => <input style={{
         lineHeight: `${data.height}px`,
         width: `${data.width}px`,
         height: `${data.height}px`,
+        borderRadius: `${data.borderRadius}px`,
     }} placeholder={data.label} type={data.inputType}></input>
 })
 
@@ -113,10 +125,10 @@ registry.register({
     width: 400,
     height: 1,
     zIndex: 0,
-    lineColor: "#333",
+    background: "#333",
     render: (data) => <hr style={{
         width: `${data.width}px`,
         height: `${data.height}px`,
-        background: `${data.lineColor}`,
+        background: `${data.background}`,
     }}></hr>
 })

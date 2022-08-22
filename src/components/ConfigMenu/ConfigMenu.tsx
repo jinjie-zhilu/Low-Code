@@ -248,8 +248,17 @@ export default defineComponent({
                                 <span class='unit'>px</span>
                             </div>
                         </ElFormItem>
+                        <ElFormItem label="字体">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].fontFamily}
+                                onChange={update}
+                            />
+                        </ElFormItem>
                         <ElFormItem label="字体颜色">
                             <ElColorPicker v-model={elements.elements[focusId.value].color}/>
+                        </ElFormItem>
+                        <ElFormItem label="背景颜色">
+                            <ElColorPicker v-model={elements.elements[focusId.value].background}/>
                         </ElFormItem>
                     </ElForm>
             },
@@ -265,9 +274,25 @@ export default defineComponent({
                         <ElFormItem label="按钮内容">
                             <ElInput
                                 v-model={elements.elements[focusId.value].label}
-                                type="textarea"
                                 onChange={update}
                             />
+                        </ElFormItem>
+                        <ElFormItem label="字体">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].fontFamily}
+                                onChange={update}
+                            />
+                        </ElFormItem>
+                        <ElFormItem label="边框半径">
+                            <div class="input-number">
+                                <ElInputNumber
+                                    v-model={elements.elements[focusId.value].borderRadius}
+                                    controlsPosition='right'
+                                    precision={0}
+                                    onChange={update}
+                                />
+                                <span class='unit'>px</span>
+                            </div>
                         </ElFormItem>
                         <ElFormItem label="字体颜色">
                             <ElColorPicker v-model={elements.elements[focusId.value].color}/>
@@ -296,6 +321,17 @@ export default defineComponent({
                                 onChange={update}
                             >
                             </ElInput>
+                        </ElFormItem>
+                        <ElFormItem label="边框半径">
+                            <div class="input-number">
+                                <ElInputNumber
+                                    v-model={elements.elements[focusId.value].borderRadius}
+                                    controlsPosition='right'
+                                    precision={0}
+                                    onChange={update}
+                                />
+                                <span class='unit'>px</span>
+                            </div>
                         </ElFormItem>
                     </ElForm>,
             },
@@ -361,7 +397,7 @@ export default defineComponent({
                         style="max-width: 100%"
                     >
                         <ElFormItem label="颜色">
-                            <ElColorPicker v-model={elements.elements[focusId.value].lineColor}/>
+                            <ElColorPicker v-model={elements.elements[focusId.value].background}/>
                         </ElFormItem>
                     </ElForm>,
             },
