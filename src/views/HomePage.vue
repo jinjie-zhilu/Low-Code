@@ -53,6 +53,15 @@
                 </el-aside>
             </el-container>
         </el-container>
+        <el-dialog custom-class="preview-dialog" v-model="previewDialog" width="80%" top="calc(4vh + 20px)">
+            <template #header="{ titleId }">
+                <span class="el-dialog__title" :id="titleId">预览窗口</span>
+                <i title="全屏预览" class="iconfont icon-fullscreen" @click="fullScreen"></i>
+            </template>
+            <el-scrollbar class="canvas-block flex-center">
+                <EditCanvas class="preview_canvas" id="preview_canvas" state="preview"></EditCanvas>
+            </el-scrollbar>
+        </el-dialog>
         <el-dialog custom-class="help-dialog" v-model="helpDialog" title="操作帮助" width="540px">
             <div class="help-box">
                 <p v-for="(item, index) in shortcuts" :key="index">
@@ -81,6 +90,7 @@ let elements: ElementsStore = useElementsStore()
 // 获取操作命令
 let state: State = reactive(registerCommand(elements))
 
+// 快捷键列表
 let shortcuts: Array<{ [key: string]: string }> = [{
         key: 'Ctrl',
         content: '按住后可以进行多选元素'
@@ -142,6 +152,11 @@ const exportCode: () => void = () => {
     }, 500)
 }
 
+// 全屏预览
+const fullScreen: () => void = () => {
+    window.open('/#/preview')
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -191,6 +206,18 @@ const exportCode: () => void = () => {
     width: 300px;
     height: 92vh;
     padding: 20px;
+}
+
+.preview-dialog {
+    .iconfont {
+        font-size: 18px;
+        margin-left: 10px;
+        cursor: pointer;
+
+        &:hover {
+            color: #409eff;
+        }
+    }
 }
 
 .help-dialog {
