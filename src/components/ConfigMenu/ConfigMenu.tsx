@@ -67,7 +67,7 @@ export default defineComponent({
 
         //输入框
         let currentFocusInput: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'wenbenkuang') {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'input') {
                 return 'input'
             } else {
                 return 'canvas'
@@ -85,7 +85,7 @@ export default defineComponent({
 
         //视频
         let currentFocusVideo: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'video-o') {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'video') {
                 return 'video'
             } else {
                 return 'canvas'
@@ -269,6 +269,9 @@ export default defineComponent({
                                 onChange={update}
                             />
                         </ElFormItem>
+                        <ElFormItem label="字体颜色">
+                            <ElColorPicker v-model={elements.elements[focusId.value].color}/>
+                        </ElFormItem>
                     </ElForm>
             },
             input: {
@@ -418,7 +421,7 @@ export default defineComponent({
                 </div>
                 {/*输入框*/}
                 <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "wenbenkuang" && elements.focusElements.focus.length === 1}>
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "input" && elements.focusElements.focus.length === 1}>
                     <ElCollapse v-model={configCollapse1.value} accordion>
                         <ElCollapseItem
                             v-slots={{title: () => <h4>{baseConfigMenu[currentFocusInput.value].title}</h4>}}
@@ -442,7 +445,7 @@ export default defineComponent({
                 </div>
                 {/*视频*/}
                 <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "video-o" && elements.focusElements.focus.length === 1}>
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "video" && elements.focusElements.focus.length === 1}>
                     <ElCollapse v-model={configCollapse1.value} accordion>
                         <ElCollapseItem
                             v-slots={{title: () => <h4>{baseConfigMenu[currentFocusVideo.value].title}</h4>}}

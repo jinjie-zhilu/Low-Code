@@ -14,6 +14,7 @@ export function getCode(selector: string): string {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     <title></title>
     <style type="text/css">
         ${editCanvasStyle + baseStyle}

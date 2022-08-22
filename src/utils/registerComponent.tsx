@@ -50,7 +50,7 @@ registry.register({
 })
 
 registry.register({
-    key: 'wenbenkuang',
+    key: 'input',
     label: '输入框',
     focus: false,
     width: 180,
@@ -62,7 +62,7 @@ registry.register({
     render: (data) => <input style={{
         lineHeight: `${data.height}px`,
         width: `${data.width}px`,
-        height: `${data.height}px`
+        height: `${data.height}px`,
     }} placeholder={data.label} type={data.inputType}></input>
 })
 
@@ -86,7 +86,7 @@ registry.register({
 })
 
 registry.register({
-    key: 'video-o',
+    key: 'video',
     label: '视频',
     focus: false,
     width: 145,
