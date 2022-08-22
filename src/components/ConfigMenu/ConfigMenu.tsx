@@ -341,7 +341,7 @@ export default defineComponent({
                                 onChange={update}
                             />
                         </ElFormItem>
-                        <ElFormItem label="播放设置"label-width="75px">
+                        <ElFormItem label="播放设置" size="small">
                                 <ElCheckboxButton v-model={elements.elements[focusId.value].autoplay} label="自动" checked></ElCheckboxButton>
                                 <ElCheckboxButton v-model={elements.elements[focusId.value].loop} label="循环" checked></ElCheckboxButton>
                                 <ElCheckboxButton v-model={elements.elements[focusId.value].muted} label="静音" checked></ElCheckboxButton>
