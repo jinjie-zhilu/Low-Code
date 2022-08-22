@@ -174,6 +174,19 @@ export function registerCommand(elements) {
         }
     })
 
+    // 全选命令
+    registry({
+        key: 'chooseAll',
+        keyboard: 'ctrl+a',
+        execute() {
+            return {
+                redo() {
+                    elements.chooseAll()
+                }
+            }
+        }
+    })
+
     // action 操作
     registry({
         key: 'action',

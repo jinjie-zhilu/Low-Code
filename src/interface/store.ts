@@ -32,8 +32,9 @@ export type ElementsStore = Store<'elements',
             Pos: {
                 top: number,
                 left: number
-            }[]): void
-        set(elements: Array<ElementItem>): void
-        delete(elements: Array<ElementItem>): void
+            }[]): void,
+        set(elements: Array<ElementItem>): void,
+        delete(elements: Array<ElementItem>): void,
+        chooseAll(): void
     }
 >

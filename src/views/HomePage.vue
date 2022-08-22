@@ -23,6 +23,7 @@
                 </el-button-group>
                 <div class="divider"></div>
                 <el-button-group>
+                    <el-button @click="helpDialog =true">帮助</el-button>
                     <el-button @click="previewDialog =true">预览</el-button>
                     <el-button @click="getShots">截图</el-button>
                     <el-button @click="exportCode">导出</el-button>
@@ -52,11 +53,12 @@
                 </el-aside>
             </el-container>
         </el-container>
-        <el-dialog custom-class="preview-dialog" v-model="previewDialog" title="预览窗口" width="80%"
-            top="calc(4vh + 20px)">
-            <el-scrollbar class="canvas-block flex-center">
-                <EditCanvas class="preview_canvas" id="preview_canvas" state="preview"></EditCanvas>
-            </el-scrollbar>
+        <el-dialog custom-class="help-dialog" v-model="helpDialog" title="操作帮助" width="540px">
+            <div class="help-box">
+                <p v-for="(item, index) in shortcuts" :key="index">
+                    <el-tag>{{item.key}}</el-tag>: {{item.content}}
+                </p>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -79,11 +81,35 @@ let elements: ElementsStore = useElementsStore()
 // 获取操作命令
 let state: State = reactive(registerCommand(elements))
 
+let shortcuts: Array<{ [key: string]: string }> = [{
+        key: 'Ctrl',
+        content: '按住后可以进行多选元素'
+    }, {
+        key: 'Ctrl + A',
+        content: '全选'
+    }, {
+        key: 'Ctrl + Z',
+        content: '撤销操作'
+    }, {
+        key: 'Ctrl + Y',
+        content: '重做操作'
+    }, {
+        key: 'Delete',
+        content: '删除选中元素'
+    }, {
+        key: 'Ctrl + Delete',
+        content: '清空画布'
+    }
+]
+
 // 撤回/重做
 let { undo, redo, deleteElement, clearCanvas } = state.commands
 
 // 显示预览窗口
 let previewDialog: Ref<boolean> = ref(false)
+
+// 显示帮助窗口
+let helpDialog: Ref<boolean> = ref(false)
 
 // 黑夜模式
 const isDark: WritableComputedRef<boolean> = useDark()
@@ -165,5 +191,14 @@ const exportCode: () => void = () => {
     width: 300px;
     height: 92vh;
     padding: 20px;
+}
+
+.help-dialog {
+    p {
+        height: 40px;
+        .el-tag {
+            margin-right: 10px;
+        }
+    }
 }
 </style>

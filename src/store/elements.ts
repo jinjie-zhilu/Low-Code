@@ -72,6 +72,12 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
                     elements: temp
                 })
             })
+        },
+        // 全选
+        chooseAll(): void {
+            this.elements.forEach(element => {
+                element.focus = true
+            })
         }
     }
 })
