@@ -31,7 +31,7 @@
         "src/**/*.d.ts",
         "src/**/*.tsx",
         "src/**/*.vue"
-    ],
+, "src/assets/canvas2image.js"    ],
     "exclude": [
         "node_modules",
         "build/**/*"

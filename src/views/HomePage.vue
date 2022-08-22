@@ -4,27 +4,14 @@
             <!-- 顶部工具栏 -->
             <el-header class="topbar">
                 <el-button-group>
-                    <el-button 
-                    :disabled="state.current < 0" 
-                    title="撤销"
-                    @click="undo"
-                    ><i class="iconfont icon-undo"></i>
+                    <el-button :disabled="state.current < 0" title="撤销" @click="undo"><i class="iconfont icon-undo"></i>
                     </el-button>
-                    <el-button 
-                    :disabled="state.current > state.stack.length - 2" 
-                    title="重做"
-                    @click="redo"
-                    ><i class="iconfont icon-redo"></i>
+                    <el-button :disabled="state.current > state.stack.length - 2" title="重做" @click="redo"><i
+                            class="iconfont icon-redo"></i>
                     </el-button>
-                    <el-button 
-                    title="删除组件" 
-                    @click="deleteElement"
-                    ><i class="iconfont icon-delete"></i>
+                    <el-button title="删除组件" @click="deleteElement"><i class="iconfont icon-delete"></i>
                     </el-button>
-                    <el-button 
-                    title="清空画布" 
-                    @click="clearCanvas"
-                    ><i class="iconfont icon-clear"></i>
+                    <el-button title="清空画布" @click="clearCanvas"><i class="iconfont icon-clear"></i>
                     </el-button>
                 </el-button-group>
                 <div class="divider"></div>
@@ -36,8 +23,8 @@
                 </el-button-group>
                 <div class="divider"></div>
                 <el-button-group>
-                    <el-button>预览</el-button>
-                    <el-button>截图</el-button>
+                    <el-button @click="previewDialog =true">预览</el-button>
+                    <el-button @click="getShots">截图</el-button>
                     <el-button>导出</el-button>
                 </el-button-group>
                 <div class="divider"></div>
@@ -55,7 +42,7 @@
                     <!-- 画布 -->
                     <el-main class="canvas-box">
                         <el-scrollbar class="canvas-block">
-                            <EditCanvas></EditCanvas>
+                            <EditCanvas state="edit"></EditCanvas>
                         </el-scrollbar>
                     </el-main>
                 </el-container>
@@ -65,20 +52,27 @@
                 </el-aside>
             </el-container>
         </el-container>
+        <el-dialog custom-class="preview-dialog" v-model="previewDialog" title="预览窗口" width="80%"
+            top="calc(4vh + 20px)">
+            <el-scrollbar class="canvas-block flex-center">
+                <div id="preview_canvas">
+                    <EditCanvas state="preview"></EditCanvas>
+                </div>
+            </el-scrollbar>
+        </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, Ref, ref, WritableComputedRef } from 'vue'
+import { ComponentInternalInstance, getCurrentInstance, reactive, Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
+import { screenshots } from '@/utils/screenshots'
 import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { registerCommand } from '@/utils/registerCommand'
 import type { ElementItem, ElementsStore, State } from "@/interface"
 import emitter from '@/utils/bus'
 import { log } from 'console'
-import { deepcopy } from '@/utils/deepcopy'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
@@ -87,7 +81,10 @@ let elements: ElementsStore = useElementsStore()
 let state: State = reactive(registerCommand(elements))
 
 // 撤回/重做
-let { undo, redo } = state.commands
+let { undo, redo, deleteElement, clearCanvas } = state.commands
+
+// 显示预览窗口
+let previewDialog: Ref<boolean> = ref(false)
 
 // 黑夜模式
 const isDark: WritableComputedRef<boolean> = useDark()
@@ -96,79 +93,20 @@ const toggleDark: (value?: boolean) => boolean = useToggle(isDark)
 // 主题切换
 let themeSelector: Ref<boolean> = ref(isDark.value)
 
-const updateState = () => {
+// 更新状态
+const updateState: () => void = () => {
     state.current++
     state.current--
 }
 emitter.on('updateState', updateState)
 
-// 清空画布方法
-const clearCanvas:() => void = () => {
-    ElMessageBox.confirm(
-        '将清空画布中的所有元素，是否继续?',
-        '警告',
-        {
-            confirmButtonText: '确认删除',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    ).then(() => {
-        // 发布删除开始事件
-        emitter.emit('actionStart')
-
-        // 删除
-        elements.clearAll()
-        ElMessage({
-            type: 'success',
-            message: '删除成功',
-        })
-
-        // 发布删除结束事件
-        emitter.emit('actionEnd')
-    })
-    .catch(() => {
-        ElMessage({
-            type: 'info',
-            message: '取消删除',
-        })
-    })
-}
-
-// 删除元素方法
-const deleteElement: () => void = () => {
-    let deleteElements: Array<ElementItem> = deepcopy(elements.focusElements.focus)
-    let elementsList: string = ''
-    deleteElements.forEach((item) => {
-        elementsList += `[${item.key}]-${item.id} `
-    })
-    ElMessageBox.confirm(
-        `将删除元素: { ${elementsList}}，是否继续?`,
-        '警告',
-        {
-            confirmButtonText: '确认删除',
-            cancelButtonText: '取消',
-            type: 'warning',
-        }
-    ).then(() => {
-        // 发布删除开始事件
-        emitter.emit('actionStart')
-
-        // 删除
-        elements.delete(deleteElements)
-        ElMessage({
-            type: 'success',
-            message: '删除成功',
-        })
-
-        // 发布删除结束事件
-        emitter.emit('actionEnd')
-    })
-    .catch(() => {
-        ElMessage({
-            type: 'info',
-            message: '取消删除',
-        })
-    })
+// 截图
+const getShots: () => void = () => {
+    previewDialog.value = true
+    setTimeout(() => {
+        const preview_canvas: HTMLElement = document.getElementById('preview_canvas')
+        screenshots(preview_canvas)
+    }, 500)
 }
 
 </script>
