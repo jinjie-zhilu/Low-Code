@@ -25,7 +25,7 @@
                 <el-button-group>
                     <el-button @click="previewDialog =true">预览</el-button>
                     <el-button @click="getShots">截图</el-button>
-                    <el-button>导出</el-button>
+                    <el-button @click="exportCode">导出</el-button>
                 </el-button-group>
                 <div class="divider"></div>
                 <el-radio-group v-model="themeSelector" size="small" fill="#ecf5ff" @change="toggleDark()">
@@ -55,9 +55,7 @@
         <el-dialog custom-class="preview-dialog" v-model="previewDialog" title="预览窗口" width="80%"
             top="calc(4vh + 20px)">
             <el-scrollbar class="canvas-block flex-center">
-                <div id="preview_canvas">
-                    <EditCanvas state="preview"></EditCanvas>
-                </div>
+                <EditCanvas class="preview_canvas" id="preview_canvas" state="preview"></EditCanvas>
             </el-scrollbar>
         </el-dialog>
     </div>
@@ -73,6 +71,7 @@ import { registerCommand } from '@/utils/registerCommand'
 import type { ElementItem, ElementsStore, State } from "@/interface"
 import emitter from '@/utils/bus'
 import { log } from 'console'
+import { getCode, downloadCode } from '@/utils/useExport'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
@@ -106,6 +105,14 @@ const getShots: () => void = () => {
     setTimeout(() => {
         const preview_canvas: HTMLElement = document.getElementById('preview_canvas')
         screenshots(preview_canvas)
+    }, 500)
+}
+
+// 导出代码
+const exportCode: () => void = () => {
+    previewDialog.value = true
+    setTimeout(() => {
+        downloadCode(getCode('.preview_canvas'))
     }, 500)
 }
 

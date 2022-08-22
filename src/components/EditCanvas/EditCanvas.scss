@@ -69,3 +69,35 @@
     right: 0;
     border-top: 1px dashed #409eff;
 }
+
+.el-buttons {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    color: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    outline: 0;
+    transition: .1s;
+    font-weight: 500;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #dcdfe6;
+    padding: 8px 15px;
+    border-radius: 4px;
+
+    &:hover {
+        color: #409eff;
+        border-color: #c6e2ff;
+        background-color: #ecf5ff;
+        outline: 0;
+    }
+}

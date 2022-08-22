@@ -45,8 +45,8 @@ registry.register({
     height: 32,
     zIndex: 0,
     fontSize: 14,
-    color: "#333",
-    render: (data) => <button class='el-button'>{ data.label }</button>
+    color: "#606266",
+    render: (data) => <button style={{ width: '100%', height: '100%' }} class='el-buttons'>{data.label}</button>
 })
 
 registry.register({
