@@ -182,6 +182,11 @@ export default function userMove(
                     img: "",
                     video: "",
                     inputType: "",
+                    lineColor: "",
+                    borderRadius: 0,
+                    muted: true,
+                    autoplay: true,
+                    loop: true,
                     width: canvas.width,
                     height: canvas.height
                 })

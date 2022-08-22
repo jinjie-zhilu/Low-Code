@@ -15,6 +15,11 @@ export function renderElement(state: string, data: ElementItem, elementMouseDown
         img: data.img,
         video: data.video,
         inputType: data.inputType,
+        lineColor: data.lineColor,
+        borderRadius: data.borderRadius,
+        muted: data.muted,
+        autoplay: data.autoplay,
+        loop: data.loop,
     }))
 
     // 获取组件信息

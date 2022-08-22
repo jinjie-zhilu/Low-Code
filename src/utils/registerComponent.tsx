@@ -75,27 +75,48 @@ registry.register({
     zIndex: 0,
     fontSize: 14,
     color: "#333",
+    borderRadius: 0,
     img: "https://www.pics.fineyh.com/images/2022/08/20/202208201641833.png",
     render: (data) => <img src={data.img}
                            style={{
                                width: `${data.width}px`,
-                               height: `${data.height}px`
-    }}></img>
+                               height: `${data.height}px`,
+                               borderRadius: `${data.borderRadius}px`,
+                           }}></img>
 })
 
 registry.register({
     key: 'video-o',
     label: '视频',
     focus: false,
-    width: 192,
+    width: 145,
     height: 108,
     zIndex: 0,
     fontSize: 14,
     color: "#333",
     video: "https://www.w3schools.com/html/movie.mp4",
+    autoplay: true,
+    loop: true,
+    muted: true,
     render: (data) => <video src={data.video}
-                           style={{
-                               width: `${data.width}px`,
-                               height: `${data.height}px`
-                           }}></video>
+                             autoplay={data.autoplay} loop={data.loop} muted={data.muted}
+                             style={{
+                                 width: `${data.width}px`,
+                                 height: `${data.height}px`
+                             }}></video>
+})
+
+registry.register({
+    key: 'line',
+    label: '线段',
+    focus: false,
+    width: 400,
+    height: 1,
+    zIndex: 0,
+    lineColor: "#333",
+    render: (data) => <hr style={{
+        width: `${data.width}px`,
+        height: `${data.height}px`,
+        background: `${data.lineColor}`,
+    }}></hr>
 })

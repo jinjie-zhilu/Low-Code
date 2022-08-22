@@ -29,6 +29,11 @@ export interface ElementItem {
     img: string,
     video: string,
     inputType: string,
+    lineColor: string,
+    borderRadius: number,
+    muted: boolean,
+    autoplay: boolean,
+    loop: boolean,
     render?: Function
 }
 

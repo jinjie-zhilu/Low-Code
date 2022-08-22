@@ -1,5 +1,14 @@
 import {useCanvasStore, useElementsStore} from "@/store"
-import {ElCollapse, ElCollapseItem, ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber} from "element-plus"
+import {
+    ElCheckboxButton, ElCheckboxGroup,
+    ElCollapse,
+    ElCollapseItem,
+    ElColorPicker,
+    ElForm,
+    ElFormItem,
+    ElInput,
+    ElInputNumber
+} from "element-plus"
 import {ref, defineComponent, watch} from "vue"
 import type {Ref} from "vue"
 import {computed} from "vue"
@@ -14,6 +23,7 @@ export default defineComponent({
         // 折叠面板显示内容
         let configCollapse: Ref<string> = ref('baseConfig')
         let configCollapse1: Ref<string> = ref('baseConfig1')
+        let configCollapse2: Ref<string> = ref('baseConfig2')
         // 当前选中的元素 id
         let focusId: Ref<number> = ref(0)
 
@@ -77,6 +87,24 @@ export default defineComponent({
         let currentFocusVideo: Ref<string> = computed(() => {
             if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'video-o') {
                 return 'video'
+            } else {
+                return 'canvas'
+            }
+        })
+
+        //线段
+        let currentFocusLine: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'line') {
+                return 'line'
+            } else {
+                return 'canvas'
+            }
+        })
+
+        //自定义事件
+        let currentFocusEvent: Ref<string> = computed(() => {
+            if (elements.elements[focusId.value]) {
+                return 'event'
             } else {
                 return 'canvas'
             }
@@ -284,6 +312,17 @@ export default defineComponent({
                                 onChange={update}
                             />
                         </ElFormItem>
+                        <ElFormItem label="边框半径">
+                            <div class="input-number">
+                                <ElInputNumber
+                                    v-model={elements.elements[focusId.value].borderRadius}
+                                    controlsPosition='right'
+                                    precision={0}
+                                    onChange={update}
+                                />
+                                <span class='unit'>px</span>
+                            </div>
+                        </ElFormItem>
                     </ElForm>,
             },
             video: {
@@ -301,6 +340,39 @@ export default defineComponent({
                                 type="textarea"
                                 onChange={update}
                             />
+                        </ElFormItem>
+                        <ElFormItem label="播放设置"label-width="75px">
+                                <ElCheckboxButton v-model={elements.elements[focusId.value].autoplay} label="自动" checked></ElCheckboxButton>
+                                <ElCheckboxButton v-model={elements.elements[focusId.value].loop} label="循环" checked></ElCheckboxButton>
+                                <ElCheckboxButton v-model={elements.elements[focusId.value].muted} label="静音" checked></ElCheckboxButton>
+                        </ElFormItem>
+                    </ElForm>,
+            },
+            line: {
+                title: '线段属性',
+                form:
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="颜色">
+                            <ElColorPicker v-model={elements.elements[focusId.value].lineColor}/>
+                        </ElFormItem>
+                    </ElForm>,
+            },
+            event: {
+                title: '自定义事件',
+                form:
+                    <ElForm
+                        label-position="left"
+                        label-width="100px"
+                        model={elements.elements[focusId.value]}
+                        style="max-width: 100%"
+                    >
+                        <ElFormItem label="事件">
+                            <ElInput></ElInput>
                         </ElFormItem>
                     </ElForm>,
             },
@@ -377,6 +449,31 @@ export default defineComponent({
                             name="baseConfig1"
                         >
                             {baseConfigMenu[currentFocusVideo.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
+                {/*线段*/}
+                <div class="config-box"
+                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "line" && elements.focusElements.focus.length === 1}>
+                    <ElCollapse v-model={configCollapse1.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusLine.value].title}</h4>}}
+                            name="baseConfig1"
+                        >
+                            {baseConfigMenu[currentFocusLine.value].form}
+                        </ElCollapseItem>
+                    </ElCollapse>
+                </div>
+                {/*自定义事件*/}
+                <div class="config-box"
+                v-show={elements.elements[focusId.value] && elements.focusElements.focus.length === 1}
+                >
+                    <ElCollapse v-model={configCollapse2.value} accordion>
+                        <ElCollapseItem
+                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusEvent.value].title}</h4>}}
+                            name="baseConfig2"
+                        >
+                            {baseConfigMenu[currentFocusEvent.value].form}
                         </ElCollapseItem>
                     </ElCollapse>
                 </div>
