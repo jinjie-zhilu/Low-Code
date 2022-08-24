@@ -3,6 +3,7 @@ import {
     ComponentRegisty,
     Canvas,
     ElementItem,
+    PublishData,
     EditData,
     Pos,
     Command,
@@ -10,7 +11,8 @@ import {
 } from "./data"
 import {
     CanvasStore,
-    ElementsStore
+    ElementsStore,
+    PublishStore
 } from './store'
 
 export type {
@@ -18,9 +20,11 @@ export type {
     ComponentRegisty,
     Canvas,
     ElementItem,
+    PublishData,
     EditData,
     CanvasStore,
     ElementsStore,
+    PublishStore,
     Command,
     State,
     Pos

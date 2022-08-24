@@ -16,17 +16,14 @@
                 </el-button-group>
                 <div class="divider"></div>
                 <el-button-group>
-                    <el-button>组合</el-button>
-                    <el-button>拆分</el-button>
-                    <el-button>锁定</el-button>
-                    <el-button>解锁</el-button>
+                    <el-button @click="helpDialog = true">帮助</el-button>
+                    <el-button @click="previewDialog = true">预览</el-button>
+                    <el-button @click="getShots">截图</el-button>
                 </el-button-group>
                 <div class="divider"></div>
                 <el-button-group>
-                    <el-button @click="helpDialog =true">帮助</el-button>
-                    <el-button @click="previewDialog =true">预览</el-button>
-                    <el-button @click="getShots">截图</el-button>
                     <el-button @click="exportCode">导出</el-button>
+                    <el-button @click="showPublishDialog">发布</el-button>
                 </el-button-group>
                 <div class="divider"></div>
                 <el-radio-group v-model="themeSelector" size="small" fill="#ecf5ff" @change="toggleDark()">
@@ -69,26 +66,58 @@
                 </p>
             </div>
         </el-dialog>
+        <el-dialog custom-class="publish-dialog" v-model="publishDialog" title="发布项目" width="540px">
+            <el-table v-if="publishPages.list.length" :data=" publishPages.list" style="width: 100%">
+                <el-table-column prop="id" label="序号" width="80" />
+                <el-table-column prop="updateTime" label="发布时间" width="120" show-overflow-tooltip=true />
+                <el-table-column prop="src" label="链接" width="180" show-overflow-tooltip=true>
+                    <template #default="scope">
+                        <a target="_blank" :href="scope.row.src">{{scope.row.src}}</a>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="src" label="操作">
+                    <template #default="scope">
+                        <el-button link type="primary" size="small" @click="copyUrl(scope.row.src)">复制地址</el-button>
+                        <el-button link type="danger" size="small" @click="deletePage(scope.row.id)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <h4 v-else>分享你的作品，让更多人看到！</h4>
+            <el-input v-model="publishPages.list[0].src">
+                <template #append>
+                    <el-button type="primary" :icon="Upload" @click="submitPublish">发布当前页面</el-button>
+                </template>
+            </el-input>
+        </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ComponentInternalInstance, getCurrentInstance, reactive, Ref, ref, WritableComputedRef } from 'vue'
-import { useElementsStore } from '@/store'
+import { reactive, Ref, ref, WritableComputedRef } from 'vue'
+import { useElementsStore, usePublishStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { screenshots } from '@/utils/screenshots'
 import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
 import { registerCommand } from '@/utils/registerCommand'
-import type { ElementItem, ElementsStore, State } from "@/interface"
+import type { ElementsStore, PublishStore, State } from "@/interface"
 import emitter from '@/utils/bus'
-import { log } from 'console'
+import { Upload } from "@element-plus/icons-vue"
 import { getCode, downloadCode } from '@/utils/useExport'
+import { getRequest, postRequest } from '@/http'
+import { log } from 'console'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
 
 // 获取操作命令
 let state: State = reactive(registerCommand(elements))
+
+// 获取发布数据
+let publishPages: PublishStore = usePublishStore()
+
+
+// 发布网址
+let publishUrl: Ref<string> = ref(window.location.host)
 
 // 快捷键列表
 let shortcuts: Array<{ [key: string]: string }> = [{
@@ -120,6 +149,9 @@ let previewDialog: Ref<boolean> = ref(false)
 
 // 显示帮助窗口
 let helpDialog: Ref<boolean> = ref(false)
+
+// 显示发布窗口
+let publishDialog: Ref<boolean> = ref(false)
 
 // 黑夜模式
 const isDark: WritableComputedRef<boolean> = useDark()
@@ -155,6 +187,34 @@ const exportCode: () => void = () => {
 // 全屏预览
 const fullScreen: () => void = () => {
     window.open('/#/preview')
+}
+
+// 打开发布对话框
+const showPublishDialog: () => void = () => {
+    // 获取发布网址
+    if (!publishPages.list.length) {
+        postRequest(elements.elements, (res) => {
+            console.log(res)
+            publishUrl.value += publishUrl.value + `/page/${res.id}`
+        })
+    } else {
+        publishUrl.value = publishPages.list[0].src
+    }
+}
+
+// 复制网址
+const copyUrl: (url: string) => void = (url: string) => {
+
+}
+
+// 删除页面
+const deletePage: (id: number) => void = (id: number) => {
+
+}
+
+// 发布页面
+const submitPublish: () => void = () => {
+
 }
 
 </script>
@@ -226,6 +286,12 @@ const fullScreen: () => void = () => {
         .el-tag {
             margin-right: 10px;
         }
+    }
+}
+.publish-dialog .el-dialog__body {
+    padding-top: 20px !important;
+    .el-input {
+        margin-top: 20px;
     }
 }
 </style>

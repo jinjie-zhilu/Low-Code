@@ -38,6 +38,13 @@ export interface ElementItem {
     render?: Function
 }
 
+// 发布页面数据
+export interface PublishData {
+    id: number,
+    updateTime: string,
+    src: string
+}
+
 // 编辑数据
 export interface EditData {
     canvas: Canvas,

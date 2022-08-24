@@ -1,5 +1,5 @@
 import { Store } from "pinia"
-import { ElementItem } from "./data"
+import { ElementItem, PublishData } from "./data"
 
 
 export type CanvasStore = Store<'canvas', {
@@ -7,6 +7,11 @@ export type CanvasStore = Store<'canvas', {
     width: number,
     height: number,
     zoom: number
+    }, {}, {}
+    >
+
+export type PublishStore = Store<'publish', {
+    list: Array<PublishData>
     }, {}, {}
 >
 
