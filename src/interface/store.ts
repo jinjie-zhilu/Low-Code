@@ -11,8 +11,14 @@ export type CanvasStore = Store<'canvas', {
     >
 
 export type PublishStore = Store<'publish', {
-    list: Array<PublishData>
-    }, {}, {}
+        list: Array<PublishData>
+    }, {
+    }, {
+        init(): void,
+        add(id: number, update: string): void,
+        have(url: string): boolean,
+        delete(id: number): void
+    }
 >
 
 export type ElementsStore = Store<'elements',

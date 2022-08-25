@@ -66,11 +66,12 @@
                 </p>
             </div>
         </el-dialog>
-        <el-dialog custom-class="publish-dialog" v-model="publishDialog" title="发布项目" width="540px">
-            <el-table v-if="publishPages.list.length" :data=" publishPages.list" style="width: 100%">
-                <el-table-column prop="id" label="序号" width="80" />
-                <el-table-column prop="updateTime" label="发布时间" width="120" show-overflow-tooltip=true />
-                <el-table-column prop="src" label="链接" width="180" show-overflow-tooltip=true>
+        <el-dialog custom-class="publish-dialog" v-model="publishDialog" title="发布项目" width="620px">
+            <el-table v-if="publishPages.list.length" :data=" publishPages.list" style="width: 100%"
+                @row-click="selectPage">
+                <el-table-column type="index" label="序号" width="60" />
+                <el-table-column prop="updateTime" label="发布时间" width="150" show-overflow-tooltip />
+                <el-table-column prop="src" label="链接" width="240" show-overflow-tooltip>
                     <template #default="scope">
                         <a target="_blank" :href="scope.row.src">{{scope.row.src}}</a>
                     </template>
@@ -78,14 +79,26 @@
                 <el-table-column prop="src" label="操作">
                     <template #default="scope">
                         <el-button link type="primary" size="small" @click="copyUrl(scope.row.src)">复制地址</el-button>
-                        <el-button link type="danger" size="small" @click="deletePage(scope.row.id)">删除</el-button>
+                        <el-popconfirm confirm-button-text="删除" cancel-button-text="取消" :icon="InfoFilled"
+                            icon-color="#626AEF" title="确定要删除这个已发布页面吗?" @confirm="deletePage(scope.row.id)"
+                            @cancel="deletePage(-1)">
+                            <template #reference>
+                                <el-button link type="danger" size="small">删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
             <h4 v-else>分享你的作品，让更多人看到！</h4>
-            <el-input v-model="publishPages.list[0].src">
+            <el-input v-model="publishUrl" readonly>
+                <template v-if="!isNewPublish" #prepend>
+                    <el-button @click="getUrl">重置</el-button>
+                </template>
                 <template #append>
-                    <el-button type="primary" :icon="Upload" @click="submitPublish">发布当前页面</el-button>
+                    <el-button type="primary" :icon="Upload" @click="submitPublish">
+                        {{isNewPublish ? '发布当前页面' : '保存到该页面'}}
+                    </el-button>
                 </template>
             </el-input>
         </el-dialog>
@@ -93,21 +106,23 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, Ref, ref, WritableComputedRef } from 'vue'
-import { useElementsStore, usePublishStore } from '@/store'
+import { computed, reactive, Ref, ref, WritableComputedRef } from 'vue'
+import { useElementsStore, usePublishStore, useCanvasStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { screenshots } from '@/utils/screenshots'
 import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
 import { registerCommand } from '@/utils/registerCommand'
-import type { ElementsStore, PublishStore, State } from "@/interface"
+import type { CanvasStore, ElementsStore, PublishStore, State } from "@/interface"
 import emitter from '@/utils/bus'
-import { Upload } from "@element-plus/icons-vue"
+import { Upload, InfoFilled } from "@element-plus/icons-vue"
 import { getCode, downloadCode } from '@/utils/useExport'
-import { getRequest, postRequest } from '@/http'
+import { deleteRequest, getRequest, postRequest, putRequest } from '@/http'
 import { log } from 'console'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
+let canvas: CanvasStore = useCanvasStore()
 
 // 获取操作命令
 let state: State = reactive(registerCommand(elements))
@@ -115,9 +130,14 @@ let state: State = reactive(registerCommand(elements))
 // 获取发布数据
 let publishPages: PublishStore = usePublishStore()
 
+// 是否为新发布页面
+let isNewPublish: Ref<boolean> = ref(true)
 
 // 发布网址
-let publishUrl: Ref<string> = ref(window.location.host)
+let publishId: Ref<number> = ref(-1)
+let publishUrl: Ref<string> = computed(() => {
+    return `http://${window.location.host}/page/${publishId.value}`
+})
 
 // 快捷键列表
 let shortcuts: Array<{ [key: string]: string }> = [{
@@ -160,6 +180,9 @@ const toggleDark: (value?: boolean) => boolean = useToggle(isDark)
 // 主题切换
 let themeSelector: Ref<boolean> = ref(isDark.value)
 
+// 初始化发布页面列表
+publishPages.init()
+
 // 更新状态
 const updateState: () => void = () => {
     state.current++
@@ -189,32 +212,86 @@ const fullScreen: () => void = () => {
     window.open('/#/preview')
 }
 
+// 获取发布网址
+const getUrl: () => void = () => {
+    if (publishPages.list.length) {
+        publishId.value = publishPages.list[0].id + 1
+    } else {
+        publishId.value = 1
+    }
+    isNewPublish.value = true
+}
+
 // 打开发布对话框
 const showPublishDialog: () => void = () => {
-    // 获取发布网址
-    if (!publishPages.list.length) {
-        postRequest(elements.elements, (res) => {
-            console.log(res)
-            publishUrl.value += publishUrl.value + `/page/${res.id}`
-        })
-    } else {
-        publishUrl.value = publishPages.list[0].src
+    if (publishId.value < 0) {
+        getUrl()
     }
+    publishPages.init()
+    publishDialog.value = true
+}
+
+// 选中某一行
+const selectPage: Function = (row: any) => {
+    publishId.value = row.id
+    isNewPublish.value = false
 }
 
 // 复制网址
 const copyUrl: (url: string) => void = (url: string) => {
-
+    navigator.clipboard.writeText(url)
+    console.log(url);
+    
+    ElMessage({
+        type: 'success',
+        message: '复制成功',
+    })
 }
 
 // 删除页面
 const deletePage: (id: number) => void = (id: number) => {
-
+    if (id > 0) {
+        deleteRequest(id, (res) => {
+            publishPages.delete(id)
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+        })
+    } else {
+        ElMessage({
+            type: 'info',
+            message: '取消删除',
+        })
+    }
 }
 
 // 发布页面
 const submitPublish: () => void = () => {
-
+    if (publishPages.list.length && publishPages.have(publishUrl.value)) {
+        putRequest(publishId.value, {
+            elements: elements.elements,
+            canvas: canvas
+        }, (res) => {
+            ElMessage({
+                type: 'success',
+                message: '发布成功',
+            })
+            publishPages.init()
+        })
+    } else {
+        postRequest({
+            elements: elements.elements,
+            canvas: canvas
+        }, (res) => {
+            ElMessage({
+                type: 'success',
+                message: '发布成功',
+            })
+            isNewPublish.value = false
+            publishPages.init()
+        })
+    }
 }
 
 </script>

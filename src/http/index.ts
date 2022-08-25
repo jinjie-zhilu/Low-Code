@@ -1,13 +1,11 @@
-import { ElementItem } from "@/interface"
 import axios from "axios"
 import { dayjs } from "element-plus"
 import { baseUrl } from "./config"
 
-
 export function getRequest(param: string ,sucessF: Function, errorF: Function = (err) => {console.log(err)}): void {
     axios.get(baseUrl + param)
         .then(res => {
-            sucessF(res.data[0])
+            sucessF(res.data)
         })
         .catch(err => {
             if (err)
@@ -15,14 +13,15 @@ export function getRequest(param: string ,sucessF: Function, errorF: Function = 
         })
 }
 
-export function postRequest(data: Array<ElementItem>, sucessF: Function, errorF: Function = (err) => { console.log(err) }): void {
+export function postRequest(data: any,sucessF: Function, errorF: Function = (err) => { console.log(err) }): void {
     let nowTime = dayjs().format('YYYY-MM-DD HH:mm')
     axios({ 
         method: 'post',
         url: baseUrl,
         data: {
             updateTime: nowTime,
-            elements: data
+            elements: data.elements,
+            canvas: data.canvas
         }
      })
         .then(res => {
@@ -34,14 +33,30 @@ export function postRequest(data: Array<ElementItem>, sucessF: Function, errorF:
         })
 }
 
-export function deleteRequest(id: number, sucessF: Function, errorF: Function = (err) => { console.log(err) }): void {
+export function putRequest(id: number, data: any, sucessF: Function, errorF: Function = (err) => { console.log(err) }): void {
     let nowTime = dayjs().format('YYYY-MM-DD HH:mm')
     axios({
-        method: 'delete',
-        url: baseUrl,
-        params: {
-            id: id
+        method: 'put',
+        url: baseUrl + `/${id}`,
+        data: {
+            updateTime: nowTime,
+            elements: data.elements,
+            canvas: data.canvas
         }
+    })
+        .then(res => {
+            sucessF(res.data)
+        })
+        .catch(err => {
+            if (err)
+                errorF(err)
+        })
+}
+
+export function deleteRequest(id: number, sucessF: Function, errorF: Function = (err) => { console.log(err) }): void {
+    axios({
+        method: 'delete',
+        url: baseUrl + `/${id}`
     })
         .then(res => {
             sucessF(res.data)
