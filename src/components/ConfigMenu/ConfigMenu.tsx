@@ -374,6 +374,7 @@ export default defineComponent({
                         <ElFormItem label="视频地址">
                             <ElInput
                                 v-model={elements.elements[focusId.value].video}
+                                clearable
                             />
                         </ElFormItem>
                         <ElFormItem label="播放设置" size="small">
@@ -396,21 +397,7 @@ export default defineComponent({
                             <ElColorPicker v-model={elements.elements[focusId.value].background}/>
                         </ElFormItem>
                     </ElForm>,
-            },
-            event: {
-                title: '自定义事件',
-                form:
-                    <ElForm
-                        label-position="left"
-                        label-width="100px"
-                        model={elements.elements[focusId.value]}
-                        style="max-width: 100%"
-                    >
-                        <ElFormItem label="事件">
-                            <ElInput></ElInput>
-                        </ElFormItem>
-                    </ElForm>,
-            },
+            }
         }
 
         // 事件属性
@@ -434,8 +421,6 @@ export default defineComponent({
 
         // 事件代码更改
         const codeChange: VoidF = () => {
-            console.log('change');
-            
             elements.updateCode(focusId.value, eventCode.value)
         }
 

@@ -86,6 +86,23 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
                     element.event = code
                 }
             })
+        },
+        // 处理带参字符串
+        processString(paramStr: string): string {
+            let substring: Array<string> = paramStr.split(/[{}]/)
+            if (substring.length === 1) {
+                return paramStr
+            }
+            let res: string = ''
+            substring.forEach(item => {
+                let sub: Array<string> = item.split(/[-.]/)
+                if (sub.length < 3) {
+                    res += item
+                    return
+                }
+                res += this.elements.filter(item => item.id == sub[1])[0][sub[2]]
+            })
+            return res
         }
     }
 })

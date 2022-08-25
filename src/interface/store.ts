@@ -46,6 +46,7 @@ export type ElementsStore = Store<'elements',
         set(elements: Array<ElementItem>): void,
         delete(elements: Array<ElementItem>): void,
         chooseAll(): void,
-        updateCode(id: number, code: string): void
+        updateCode(id: number, code: string): void,
+        processString(paramStr: string): string
     }
 >
