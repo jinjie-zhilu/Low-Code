@@ -18,6 +18,8 @@ export interface ElementItem {
     key: string,
     focus: boolean,
     label: string,
+    labelUrl: string,
+    labelAlert: string,
     top?: number,
     left?: number,
     width: number,

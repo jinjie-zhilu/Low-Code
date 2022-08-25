@@ -8,6 +8,7 @@ import {
     ElFormItem,
     ElInput,
     ElInputNumber,
+    ElButton,
     ElSlider  
 } from "element-plus"
 import {ref, defineComponent, watch} from "vue"
@@ -101,7 +102,7 @@ export default defineComponent({
                 return 'canvas'
             }
         })
-
+        
         //自定义事件
         let currentFocusEvent: Ref<string> = computed(() => {
             if (elements.elements[focusId.value]) {
@@ -110,6 +111,135 @@ export default defineComponent({
                 return 'canvas'
             }
         })
+
+        // let focus1=elements.elements[focusId.value].labelUrl
+
+        // let focus2=elements.elements[focusId.value].labelAlert
+
+        const addEvent1=() =>{
+            let text1=document.getElementById('child1') as HTMLInputElement
+            let text2=document.getElementById('child2') as HTMLInputElement
+            console.log("sdsdff点点带你")
+            if(elements.elements[focusId.value].key=='image'){
+                console.log(elements.elements[focusId.value].key)
+                console.log("输入的网址为:  "+text1.value)
+                console.log("选中的组件:  "+document.getElementById("image"))
+                console.log("组件的宽： "+document.getElementById("image").clientWidth)
+                console.log("组件的高： "+document.getElementById("image").clientHeight)
+                console.log(document)
+                //点击事件
+                document.getElementById("image").addEventListener('click',click)
+
+                function click(){
+                    console.log("点点点歌头1111")
+                    window.open(text1.value,'_blank')
+                }
+            }
+            else if(elements.elements[focusId.value].key=='btn'){
+                document.getElementById("btn").addEventListener('click',click)
+
+                function click(){
+                    console.log("点点点歌头1111")
+                    window.open(text1.value,'_blank')
+                }
+            }
+            else if(elements.elements[focusId.value].key=='text'){
+                document.getElementById("text").addEventListener('click',click)
+
+                function click(){
+                    console.log("点点点歌头1111")
+                    window.open(text1.value,'_blank')
+                }
+            }
+            else if(elements.elements[focusId.value].key=='video'){
+                document.getElementById("video").addEventListener('click',click)
+
+                function click(){
+                    console.log("点点点歌头1111")
+                    window.open(text1.value,'_blank')
+                }
+            }
+            else if(elements.elements[focusId.value].key=='line'){
+                document.getElementById("line").addEventListener('click',click)
+
+                function click(){
+                    console.log("点点点歌头1111")
+                    window.open(text1.value,'_blank')
+                }
+            }
+
+
+            // if(text1){
+            //     return elements.$id['child1'].addEventListener('click',()=>
+            //     {
+            //         console.log("点击了点击了1111");
+            //         window.location.href = text1.value
+            //     })
+            // }
+            // if(text2){
+            //     return elements.$id['child1'].addEventListener('click',()=>
+            //     {
+            //         console.log("点击了点击了22222");
+            //         alert(text2.value)
+            //     })
+            // }
+
+        }
+
+
+        const addEvent2=() =>{
+            let text2=document.getElementById('child2') as HTMLInputElement
+            console.log("vvvvv点点带你")
+            if(elements.elements[focusId.value].key=='image'){
+                console.log(elements.elements[focusId.value].key)
+                console.log("输入的alert为:  "+text2.value)
+                console.log("选中的组件:  "+document.getElementById("image"))
+                console.log("组件的宽： "+document.getElementById("image").clientWidth)
+                console.log("组件的高： "+document.getElementById("image").clientHeight)
+                console.log(document)
+                //点击事件
+                document.getElementById("image").addEventListener('click',click)
+
+                function click(){
+                    console.log(text2.value)
+                    
+                }
+            }
+            else if(elements.elements[focusId.value].key=='btn'){
+                document.getElementById("btn").addEventListener('click',click)
+
+                function click(){
+                    console.log(text2.value)
+                    
+                }
+            }
+            else if(elements.elements[focusId.value].key=='text'){
+                document.getElementById("text").addEventListener('click',click)
+
+                function click(){
+                    console.log(text2.value)
+                    
+                }
+            }
+            else if(elements.elements[focusId.value].key=='video'){
+                document.getElementById("video").addEventListener('click',click)
+
+                function click(){
+                    console.log(text2.value)
+                    
+                }
+            }
+            else if(elements.elements[focusId.value].key=='line'){
+                document.getElementById("line").addEventListener('click',click)
+
+                function click(){
+                    console.log(text2.value)
+                    
+                }
+            }
+
+        }
+
 
         // 表单更新
         const update = (value) => {
@@ -125,7 +255,7 @@ export default defineComponent({
             })
         }
        //缩放功能
-      
+
         const meth = (value) =>{
             let w = elements.elements[focusId.value].width
             let h = elements.elements[focusId.value].height
@@ -440,9 +570,30 @@ export default defineComponent({
                         model={elements.elements[focusId.value]}
                         style="max-width: 100%"
                     >
-                        <ElFormItem label="事件">
-                            <ElInput></ElInput>
+                        <ElFormItem label="跳转url">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].labelUrl}
+                                id="child1"
+                                type="textarea"
+                                placeholder="请输入要跳转的url"
+                                onChange={update}
+                                clearable />
+                                <ElButton style="margin-top: 20px;" onClick={addEvent1}>确定</ElButton>
                         </ElFormItem>
+                        <ElFormItem label="alert内容">
+                            <ElInput
+                                v-model={elements.elements[focusId.value].labelAlert}
+                                id="child2"
+                                type="textarea"
+                                placeholder="请输入要alert的内容"
+                                onChange={update}
+                                clearable />
+                            <ElButton style="margin-top: 20px;" onClick={addEvent2}>确定</ElButton>
+                        </ElFormItem>
+                        
+
+                        
+
                     </ElForm>,
             },
         }

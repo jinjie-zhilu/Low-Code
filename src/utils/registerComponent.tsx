@@ -35,7 +35,7 @@ registry.register({
     fontFamily: "",
     color: "#333",
     background: "",
-    render: (data) => <p style={{
+    render: (data) => <p id="text"  style={{
         textAlign: 'center',
         lineHeight: `${data.height}px`,
         fontFamily: `${data.fontFamily}`,
@@ -56,7 +56,7 @@ registry.register({
     fontFamily: "",
     color: "#606266",
     borderRadius: 5,
-    render: (data) => <button style={{
+    render: (data) => <button id="btn"  style={{
         width: '100%', height: '100%',
         fontFamily: `${data.fontFamily}`,
         borderRadius: `${data.borderRadius}px`,
@@ -97,7 +97,7 @@ registry.register({
     zoom:100,
     revolve:0,
     img: "https://www.pics.fineyh.com/images/2022/08/20/202208201641833.png",
-    render: (data) => <img src={data.img}
+    render: (data) => <img id="image" src={data.img}
                            style={{
                                width: `${data.width}px`,
                                height: `${data.height}px`,
@@ -120,7 +120,7 @@ registry.register({
     autoplay: true,
     loop: true,
     muted: true,
-    render: (data) => <video src={data.video}
+    render: (data) => <video id="video"  src={data.video}
                              autoplay={data.autoplay} loop={data.loop} muted={data.muted}
                              style={{
                                  width: `${data.width}px`,
@@ -136,9 +136,7 @@ registry.register({
     height: 1,
     zIndex: 0,
     background: "#333",
-    zoom:100,
-    revolve:0,
-    render: (data) => <hr style={{
+    render: (data) => <hr id='line' style={{
         width: `${data.width}px`,
         height: `${data.height}px`,
         background: `${data.background}`,
