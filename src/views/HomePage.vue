@@ -211,7 +211,7 @@ const exportCode: VoidF = () => {
 
 // 全屏预览
 const fullScreen: VoidF = () => {
-    window.open('/#/preview')
+    window.open('/preview')
 }
 
 // 获取发布网址

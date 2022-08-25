@@ -44,6 +44,8 @@ export default defineComponent({
                         return
                     }
                 })
+
+                eventCode.value = elements.elements[focusId.value] ? elements.elements[focusId.value].event : ''
                 
                 baseConfigMenu.general.title = `[${focusList[0].key}-${focusList[0].id}]-样式`
                 return 'general'
@@ -186,20 +188,6 @@ export default defineComponent({
                                 />
                             </div>
                         </ElFormItem>
-                        <ElFormItem label="旋转角度">
-                            <ElSlider
-                                max={360}
-                                v-model={elements.elements[focusId.value].revolve}
-                                onInput={roter}
-                            />
-                        </ElFormItem>
-                        <ElFormItem label="缩放比例">
-                            <ElSlider
-                                max={200}
-                                v-model={elements.elements[focusId.value].zoom}
-                                onChange={meth}
-                            />
-                        </ElFormItem>
                     </ElForm>
             }
         }
@@ -318,12 +306,6 @@ export default defineComponent({
                                 type="textarea"
                             />
                         </ElFormItem>
-                        <ElFormItem label="类型 Type">
-                            <ElInput
-                                v-model={elements.elements[focusId.value].inputType}
-                            >
-                            </ElInput>
-                        </ElFormItem>
                         <ElFormItem label="边框半径">
                             <div class="input-number">
                                 <ElInputNumber
@@ -422,6 +404,8 @@ export default defineComponent({
 
         // 事件代码更改
         const codeChange: VoidF = () => {
+            console.log('change');
+            
             elements.updateCode(focusId.value, eventCode.value)
         }
 

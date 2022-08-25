@@ -67,7 +67,7 @@ registry.register({
 registry.register({
     key: 'input',
     label: '输入框',
-    value: '文本',
+    value: '',
     focus: false,
     width: 180,
     height: 32,
@@ -121,11 +121,12 @@ registry.register({
     zoom:100,
     revolve:0,
     video: "https://www.w3schools.com/html/movie.mp4",
-    autoplay: true,
+    autoplay: false,
     loop: true,
     muted: true,
     event: '',
     render: (data) => <video src={data.video}
+                            controls
                              autoplay={data.autoplay} loop={data.loop} muted={data.muted}
                              style={{
                                  width: `${data.width}px`,

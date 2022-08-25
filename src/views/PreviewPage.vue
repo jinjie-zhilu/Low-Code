@@ -35,4 +35,10 @@ if (router.params.id) {
 </script>
 
 <style lang="scss" scoped>
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    /* 滚动条整体样式 */
+    display: none;
+}
 </style>
