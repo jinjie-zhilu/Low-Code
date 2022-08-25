@@ -40,7 +40,7 @@
                     <!-- 画布 -->
                     <el-main class="canvas-box">
                         <el-scrollbar class="canvas-block">
-                            <EditCanvas state="edit"></EditCanvas>
+                            <EditCanvas></EditCanvas>
                         </el-scrollbar>
                     </el-main>
                 </el-container>
@@ -50,15 +50,17 @@
                 </el-aside>
             </el-container>
         </el-container>
+        <!-- 预览对话框 -->
         <el-dialog custom-class="preview-dialog" v-model="previewDialog" width="80%" top="calc(4vh + 20px)">
             <template #header="{ titleId }">
                 <span class="el-dialog__title" :id="titleId">预览窗口</span>
                 <i title="全屏预览" class="iconfont icon-fullscreen" @click="fullScreen"></i>
             </template>
             <el-scrollbar class="canvas-block flex-center">
-                <EditCanvas class="preview_canvas" id="preview_canvas" state="preview"></EditCanvas>
+                <ShowCanvas class="preview_canvas" id="preview_canvas" :data="{canvas, elements: elements.elements}"></ShowCanvas>
             </el-scrollbar>
         </el-dialog>
+        <!-- 帮助对话框 -->
         <el-dialog custom-class="help-dialog" v-model="helpDialog" title="操作帮助" width="540px">
             <div class="help-box">
                 <p v-for="(item, index) in shortcuts" :key="index">
@@ -66,6 +68,7 @@
                 </p>
             </div>
         </el-dialog>
+        <!-- 发布项目对话框 -->
         <el-dialog custom-class="publish-dialog" v-model="publishDialog" title="发布项目" width="620px">
             <el-table v-if="publishPages.list.length" :data=" publishPages.list" style="width: 100%"
                 @row-click="selectPage">
@@ -110,14 +113,13 @@ import { computed, reactive, Ref, ref, WritableComputedRef } from 'vue'
 import { useElementsStore, usePublishStore, useCanvasStore } from '@/store'
 import { useDark, useToggle } from '@vueuse/core'
 import { screenshots } from '@/utils/screenshots'
-import { ComponentList, EditCanvas, ConfigMenu } from '@/components'
+import { ComponentList, EditCanvas, ConfigMenu, ShowCanvas } from '@/components'
 import { registerCommand } from '@/utils/registerCommand'
 import type { CanvasStore, ElementsStore, PublishStore, State } from "@/interface"
 import emitter from '@/utils/bus'
 import { Upload, InfoFilled } from "@element-plus/icons-vue"
 import { getCode, downloadCode } from '@/utils/useExport'
 import { deleteRequest, getRequest, postRequest, putRequest } from '@/http'
-import { log } from 'console'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 获取画布元素列表
@@ -239,9 +241,7 @@ const selectPage: Function = (row: any) => {
 
 // 复制网址
 const copyUrl: (url: string) => void = (url: string) => {
-    navigator.clipboard.writeText(url)
-    console.log(url);
-    
+    navigator.clipboard.writeText(url)    
     ElMessage({
         type: 'success',
         message: '复制成功',

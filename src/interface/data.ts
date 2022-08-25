@@ -9,8 +9,7 @@ export interface ComponentData {
 export interface Canvas {
     bgColor: string,
     width: number,
-    height: number,
-    zoom: number
+    height: number
 }
 
 // 组件元素属性

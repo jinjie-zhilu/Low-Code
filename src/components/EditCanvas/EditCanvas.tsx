@@ -8,12 +8,8 @@ import type { ElementItem, CanvasStore, ElementsStore, Pos } from '@/interface'
 import { renderElement } from './renderElement'
 
 export default defineComponent({
-    props: {
-        state: { type: String }
-    },
-    setup(props) {
+    setup() {
         // 处理数据
-        let state: string = props.state
         let canvas: CanvasStore = useCanvasStore()
         let elements: ElementsStore = useElementsStore()
 
@@ -31,7 +27,7 @@ export default defineComponent({
             width: canvas.width + 'px',
             height: canvas.height + 'px',
             backgroundColor: canvas.bgColor,
-            backgroundImage: state === 'edit' ? 'linear-gradient(90deg, rgba(60, 10, 30, .04) 3%, transparent 0), linear-gradient(1turn, rgba(60, 10, 30, .04) 3%, transparent 0)' : null,
+            backgroundImage: 'linear-gradient(90deg, rgba(60, 10, 30, .04) 3%, transparent 0), linear-gradient(1turn, rgba(60, 10, 30, .04) 3%, transparent 0)',
             backgroundSize: '20px 20px',
             backgroundPosition: '50%',
             backgroundRepeat: 'repeat'
@@ -39,27 +35,25 @@ export default defineComponent({
 
         // 提供画布的 ref
         const contentRef: Ref<any> = ref()
-        if (state === 'edit') {
-            emitter.emit("contentRef", contentRef)
-        }
+        emitter.emit("contentRef", contentRef)
 
         // 引入移动函数
         const { elementMouseDown, elementMouseUp } = useMove(elements, canvas, snapline, isMove)
 
         function CanvasContent(elements: Array<ElementItem>) {
             return (elements.map(item =>
-                renderElement(state, item, elementMouseDown, elementMouseUp)
+                renderElement(item, elementMouseDown, elementMouseUp)
             ))
         }
 
         // 生成模板
         return () => (
             <div class="canvas-block">
-                <div class={`element-content ${state}`}
+                <div class={`element-content edit`}
                     style={canvasStyle.value as StyleValue}
                     ref={contentRef}
                     // @ts-ignore
-                    onmousedown={state === 'edit' ? elements.clearFocus : null}>
+                    onmousedown={elements.clearFocus}>
                     {
                         CanvasContent(elements.elements)
                     }

@@ -6,8 +6,7 @@ export const useCanvasStore: () => CanvasStore = defineStore('canvas', {
         return {
             bgColor: "#fff",
             width: 800,
-            height: 520,
-            zoom: 100
+            height: 520
         }
     },
     getters: {

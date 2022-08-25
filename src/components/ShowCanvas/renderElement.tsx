@@ -1,7 +1,7 @@
 import { computed, inject } from 'vue'
 import { ComponentRegisty, ElementItem } from '@/interface'
 
-export function renderElement(data: ElementItem, elementMouseDown: Function, elementMouseUp: Function) {
+export function renderElement(state: string, data: ElementItem) {
 
     // 元素的样式
     const elementStyle = computed(() => ({
@@ -34,13 +34,6 @@ export function renderElement(data: ElementItem, elementMouseDown: Function, ele
         <div
             class={'element-item' + (data.focus ? ' element-focus' : '')}
             style={elementStyle.value}
-
-            // @ts-ignore
-            draggable
-            // @ts-ignore
-            onmousedown={(e) => {elementMouseDown(e, data)}}
-            // @ts-ignore
-            onmouseup={(e) => {elementMouseUp(e, data)} }
         >
             {renderComponent}
         </div>

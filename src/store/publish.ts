@@ -17,7 +17,6 @@ export const usePublishStore: () => PublishStore = defineStore('publish', {
         init(): void {
             this.list.splice(0, this.list.length)
             getRequest('?_sort=id&_order=desc', (res) => {
-                console.log('res',res);
                 res.forEach(element => {
                     this.add(element.id, element.updateTime)
                 })
@@ -35,7 +34,6 @@ export const usePublishStore: () => PublishStore = defineStore('publish', {
         // 判断 list 中是否存在该网址
         have(url: string): boolean {
             let sameUrl = this.list.filter(item => item.src === url)
-            console.log(sameUrl, sameUrl > 0);
             return sameUrl.length > 0
         },
         // 删除

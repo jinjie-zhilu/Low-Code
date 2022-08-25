@@ -5,8 +5,7 @@ import { ElementItem, PublishData } from "./data"
 export type CanvasStore = Store<'canvas', {
     bgColor: String,
     width: number,
-    height: number,
-    zoom: number
+    height: number
     }, {}, {}
     >
 

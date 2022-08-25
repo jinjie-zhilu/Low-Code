@@ -118,7 +118,8 @@ export default defineComponent({
         const roter = (value) =>{
             let doms = document.querySelectorAll('.element-item')
             doms.forEach((item)=>{
-                 if(item.className === 'element-item element-focus'){
+                if (item.className === 'element-item element-focus') {
+                        // @ts-ignore
                       item.style.transform=`rotateZ(${elements.elements[focusId.value].revolve}deg)`
                  }
             })
@@ -167,16 +168,6 @@ export default defineComponent({
                                     precision={0}
                                 />
                                 <span class='unit'>px</span>
-                            </div>
-                        </ElFormItem>
-                        <ElFormItem label="缩放比例">
-                            <div class="input-number">
-                                <ElInputNumber
-                                    v-model={canvas.zoom}
-                                    controlsPosition='right'
-                                    precision={0}
-                                />
-                                <span class='unit'>%</span>
                             </div>
                         </ElFormItem>
                     </ElForm>
