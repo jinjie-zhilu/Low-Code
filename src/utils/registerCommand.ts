@@ -97,7 +97,7 @@ export function registerCommand(elements) {
                     let deleteElements: Array<ElementItem> = deepcopy(elements.focusElements.focus)
                     let elementsList: string = ''
                     deleteElements.forEach((item) => {
-                        elementsList += `[${item.key}]-${item.id} `
+                        elementsList += `[${item.key}-${item.id}] `
                     })
 
                     // 提示
@@ -194,10 +194,10 @@ export function registerCommand(elements) {
         init() {
             this.before = null
             // action 开始，保存事件
-            const start: () => void = () => {
+            const start: VoidF = () => {
                 this.before = deepcopy(elements.elements)
             }
-            const end: () => void = () => {
+            const end: VoidF = () => {
                 // @ts-ignore
                 state.commands.action()
             }

@@ -7,7 +7,8 @@ import {
     EditData,
     Pos,
     Command,
-    State
+    State,
+    VoidF
 } from "./data"
 import {
     CanvasStore,
@@ -27,5 +28,6 @@ export type {
     PublishStore,
     Command,
     State,
-    Pos
+    Pos,
+    VoidF
 }

@@ -78,6 +78,14 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
             this.elements.forEach(element => {
                 element.focus = true
             })
+        },
+        // 更新事件代码
+        updateCode(id: number, code: string): void {
+            this.elements.forEach(element => {
+                if (element.id === id) {
+                    element.event = code
+                }
+            })
         }
     }
 })

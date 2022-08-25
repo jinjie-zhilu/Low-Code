@@ -1,3 +1,6 @@
+// 函数
+export type VoidF = () => void
+
 // 组件渲染数据
 export interface ComponentData {
     key: string,
@@ -36,7 +39,8 @@ export interface ElementItem {
     loop: boolean,
     render?: Function,
     zoom?: number,
-    revolve?:number,
+    revolve?: number,
+    event?: string
 }
 
 // 发布页面数据
@@ -76,8 +80,8 @@ export interface Command {
     pushStack?: boolean,
     init?: Function,
     execute(): {
-        redo: () => void,
-        undo?: () => void
+        redo: VoidF,
+        undo?: VoidF
     }
 }
 

@@ -115,7 +115,7 @@ import { useDark, useToggle } from '@vueuse/core'
 import { screenshots } from '@/utils/screenshots'
 import { ComponentList, EditCanvas, ConfigMenu, ShowCanvas } from '@/components'
 import { registerCommand } from '@/utils/registerCommand'
-import type { CanvasStore, ElementsStore, PublishStore, State } from "@/interface"
+import type { CanvasStore, ElementsStore, PublishStore, State, VoidF } from "@/interface"
 import emitter from '@/utils/bus'
 import { Upload, InfoFilled } from "@element-plus/icons-vue"
 import { getCode, downloadCode } from '@/utils/useExport'
@@ -186,14 +186,14 @@ let themeSelector: Ref<boolean> = ref(isDark.value)
 publishPages.init()
 
 // 更新状态
-const updateState: () => void = () => {
+const updateState: VoidF = () => {
     state.current++
     state.current--
 }
 emitter.on('updateState', updateState)
 
 // 截图
-const getShots: () => void = () => {
+const getShots: VoidF = () => {
     previewDialog.value = true
     setTimeout(() => {
         const preview_canvas: HTMLElement = document.getElementById('preview_canvas')
@@ -202,7 +202,7 @@ const getShots: () => void = () => {
 }
 
 // 导出代码
-const exportCode: () => void = () => {
+const exportCode: VoidF = () => {
     previewDialog.value = true
     setTimeout(() => {
         downloadCode(getCode('.preview_canvas'))
@@ -210,12 +210,12 @@ const exportCode: () => void = () => {
 }
 
 // 全屏预览
-const fullScreen: () => void = () => {
+const fullScreen: VoidF = () => {
     window.open('/#/preview')
 }
 
 // 获取发布网址
-const getUrl: () => void = () => {
+const getUrl: VoidF = () => {
     if (publishPages.list.length) {
         publishId.value = publishPages.list[0].id + 1
     } else {
@@ -225,7 +225,7 @@ const getUrl: () => void = () => {
 }
 
 // 打开发布对话框
-const showPublishDialog: () => void = () => {
+const showPublishDialog: VoidF = () => {
     if (publishId.value < 0) {
         getUrl()
     }
@@ -267,7 +267,7 @@ const deletePage: (id: number) => void = (id: number) => {
 }
 
 // 发布页面
-const submitPublish: () => void = () => {
+const submitPublish: VoidF = () => {
     if (publishPages.list.length && publishPages.have(publishUrl.value)) {
         putRequest(publishId.value, {
             elements: elements.elements,

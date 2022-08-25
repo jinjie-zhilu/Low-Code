@@ -35,6 +35,7 @@ registry.register({
     fontFamily: "sans-serif",
     color: "#333",
     background: "",
+    event: '',
     render: (data) => <p style={{
         textAlign: 'center',
         lineHeight: `${data.height}px`,
@@ -56,6 +57,7 @@ registry.register({
     fontFamily: "sans-serif",
     color: "#606266",
     borderRadius: 5,
+    event: '',
     render: (data) => <button style={{
         width: '100%', height: '100%',
         fontFamily: `${data.fontFamily}`,
@@ -76,6 +78,7 @@ registry.register({
     revolve:0,
     inputType: "",
     borderRadius: 5,
+    event: '',
     render: (data) => <input style={{
         lineHeight: `${data.height}px`,
         width: `${data.width}px`,
@@ -97,6 +100,7 @@ registry.register({
     zoom:100,
     revolve:0,
     img: "https://www.pics.fineyh.com/images/2022/08/20/202208201641833.png",
+    event: '',
     render: (data) => <img src={data.img}
                            style={{
                                width: `${data.width}px`,
@@ -120,6 +124,7 @@ registry.register({
     autoplay: true,
     loop: true,
     muted: true,
+    event: '',
     render: (data) => <video src={data.video}
                              autoplay={data.autoplay} loop={data.loop} muted={data.muted}
                              style={{
@@ -137,7 +142,8 @@ registry.register({
     zIndex: 0,
     background: "#333",
     zoom:100,
-    revolve:0,
+    revolve: 0,
+    event: '',
     render: (data) => <hr style={{
         width: `${data.width}px`,
         height: `${data.height}px`,

@@ -1,5 +1,6 @@
 import {useCanvasStore, useElementsStore} from "@/store"
 import {
+    ElButton,
     ElCheckboxButton, ElCheckboxGroup,
     ElCollapse,
     ElCollapseItem,
@@ -8,6 +9,7 @@ import {
     ElFormItem,
     ElInput,
     ElInputNumber,
+    ElMessage,
     ElOption,
     ElSelect,
     ElSlider  
@@ -15,7 +17,7 @@ import {
 import {ref, defineComponent, watch} from "vue"
 import type {Ref} from "vue"
 import {computed} from "vue"
-import type {CanvasStore, ElementItem, ElementsStore} from "@/interface"
+import type {CanvasStore, ElementItem, ElementsStore, VoidF} from "@/interface"
 import "./ConfigMenu.css"
 
 export default defineComponent({
@@ -217,7 +219,7 @@ export default defineComponent({
             }]
 
         // 组件属性配置表单
-        const elementConfigMenu ={
+        const elementConfigMenu = {
             text: {
                 title: '文本属性',
                 form:
@@ -276,9 +278,14 @@ export default defineComponent({
                             />
                         </ElFormItem>
                         <ElFormItem label="字体">
-                            <ElInput
-                                v-model={elements.elements[focusId.value].fontFamily}
-                            />
+                            <ElSelect v-model={elements.elements[focusId.value].fontFamily} placeholder="字体选择">
+                                {fontFamilys.map(item =>
+                                    <ElOption
+                                        key={item.value}
+                                        label={item.label}
+                                        value={item.value}
+                                    />)}
+                            </ElSelect>
                         </ElFormItem>
                         <ElFormItem label="边框半径">
                             <div class="input-number">
@@ -406,38 +413,110 @@ export default defineComponent({
             },
         }
 
+        // 事件属性
+        let eventListen: Ref<string> = ref('click')
+        let eventAction: Ref<string> = ref('href')
+        let eventContent: Ref<string> = ref('https://juejin.cn/')
+        let eventCode: Ref<string> = ref(elements.elements[focusId.value] ? elements.elements[focusId.value].event : '')
+
+        // 添加事件
+        const addEvent: VoidF = () => {
+            if (eventCode.value && eventCode.value.match(eventListen.value)) {
+                ElMessage.warning(`已添加 ${eventListen.value} 事件`)
+                return
+            }
+            if (eventCode.value) {
+                eventCode.value += ','
+            }
+            eventCode.value += `${eventListen.value}(${eventAction.value}(${eventContent.value}))`
+            codeChange()
+        }
+
+        // 事件代码更改
+        const codeChange: VoidF = () => {
+            console.log('change');
+            
+            elements.updateCode(focusId.value, eventCode.value)
+        }
+
+        // 事件配置表单
+        const eventConfigMenu = {
+            title: '触发事件',
+            form:
+                <ElForm
+                    label-position="left"
+                    label-width="100px"
+                    model={elements.elements[focusId.value]}
+                    style="max-width: 100%"
+                >
+                    <ElFormItem label="触发条件">
+                        <ElSelect v-model={eventListen.value} placeholder="触发条件">
+                            <ElOption
+                                key='1'
+                                label='点击'
+                                value='click'
+                            />
+                            <ElOption
+                                key='2'
+                                label='悬浮'
+                                value='mouseenter'
+                            />
+                        </ElSelect>
+                    </ElFormItem>
+                    <ElFormItem label="执行事件">
+                        <ElSelect v-model={eventAction.value} placeholder="字体选择">
+                            <ElOption
+                                key='1'
+                                label='跳转'
+                                value='href'
+                            />
+                            <ElOption
+                                key='2'
+                                label='弹框'
+                                value='alert'
+                            />
+                        </ElSelect>
+                    </ElFormItem>
+                    <ElFormItem label={eventAction.value === 'href' ? '跳转链接' : '弹框内容'}>
+                        <ElInput v-model={eventContent.value} />
+                    </ElFormItem>
+                    <ElFormItem>
+                        <ElButton onClick={addEvent}>添加事件</ElButton>
+                    </ElFormItem>
+                    <ElFormItem label="事件代码">
+                        <ElInput v-model={eventCode.value} type="textarea" onChange={codeChange}/>
+                    </ElFormItem>
+                </ElForm>
+        }
+
         return () => (
             <div>
                 {/* 基础样式 */}
                 <div class="config-box">
                     <ElCollapse v-model={configCollapse.value} accordion>
+                        {/* 基础属性 */}
                         <ElCollapseItem
                             v-slots={{title: () => <h4>{baseConfigMenu[currentFocus.value].title}</h4>}}
                             name="baseConfig"
                         >
                             {baseConfigMenu[currentFocus.value].form}
                         </ElCollapseItem>
+                        {/* 组件属性 */}
                         {currentFocusElement.value != '' ? <ElCollapseItem
                             v-slots={{ title: () => <h4>{elementConfigMenu[currentFocusElement.value].title}</h4> }}
                             name="elementConfig"
                         >
                             {elementConfigMenu[currentFocusElement.value].form}
                         </ElCollapseItem> : null}
+                        {/* 触发事件 */}
+                        {currentFocusElement.value != '' ? <ElCollapseItem
+                            v-slots={{ title: () => <h4>{eventConfigMenu.title}</h4> }}
+                            name="eventConfig"
+                        >
+                            {eventConfigMenu.form}
+                        </ElCollapseItem> : null}
                     </ElCollapse>
                 </div>
-                {/*自定义事件
-                <div class="config-box"
-                v-show={elements.elements[focusId.value] && elements.focusElements.focus.length === 1}
-                >
-                    <ElCollapse v-model={configCollapse2.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusEvent.value].title}</h4>}}
-                            name="baseConfig2"
-                        >
-                            {baseConfigMenu[currentFocusEvent.value].form}
-                        </ElCollapseItem>
-                    </ElCollapse>
-                </div>*/}
             </div>
         )
     }
