@@ -7,7 +7,8 @@ import {
     ElForm,
     ElFormItem,
     ElInput,
-    ElInputNumber
+    ElInputNumber,
+    ElSlider  
 } from "element-plus"
 import {ref, defineComponent, watch} from "vue"
 import type {Ref} from "vue"
@@ -114,7 +115,31 @@ export default defineComponent({
         const update = (value) => {
 
         }
-
+        const roter = (value) =>{
+            let doms = document.querySelectorAll('.element-item')
+            doms.forEach((item)=>{
+                 if(item.className === 'element-item element-focus'){
+                      item.style.transform=`rotateZ(${elements.elements[focusId.value].revolve}deg)`
+                 }
+            })
+        }
+       //缩放功能
+      
+        const meth = (value) =>{
+            let w = elements.elements[focusId.value].width
+            let h = elements.elements[focusId.value].height
+            elements.elements[focusId.value].width = w * value/100
+            elements.elements[focusId.value].height = h * value/100
+            if(elements.elements[focusId.value].width==0 || elements.elements[focusId.value].height==0){
+                if(elements.elements[focusId.value].key=='line'){
+                 elements.elements[focusId.value].width = 10
+                 elements.elements[focusId.value].height = 1
+               }else{
+                 elements.elements[focusId.value].width = 10
+                 elements.elements[focusId.value].height = 10
+               }
+             }
+        }
         // 基础属性配置表单
         const baseConfigMenu = {
             canvas: {
@@ -218,6 +243,20 @@ export default defineComponent({
                                     onChange={update}
                                 />
                             </div>
+                        </ElFormItem>
+                        <ElFormItem label="旋转角度">
+                            <ElSlider  
+                            max={360}
+                            v-model={elements.elements[focusId.value].revolve}  
+                            onInput={roter}
+                            />
+                        </ElFormItem>
+                        <ElFormItem label="缩放比例">
+                            <ElSlider  
+                            max={200}
+                            v-model={elements.elements[focusId.value].zoom}  
+                            onChange={meth}
+                            />
                         </ElFormItem>
                     </ElForm>
             },

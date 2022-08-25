@@ -35,7 +35,9 @@ export interface ElementItem {
     muted: boolean,
     autoplay: boolean,
     loop: boolean,
-    render?: Function
+    render?: Function,
+    zoom?: number,
+    revolve?:number,
 }
 
 // 发布页面数据

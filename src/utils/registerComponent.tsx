@@ -30,6 +30,8 @@ registry.register({
     height: 22,
     zIndex: 0,
     fontSize: 14,
+    zoom:100,
+    revolve:0,
     fontFamily: "",
     color: "#333",
     background: "",
@@ -49,6 +51,8 @@ registry.register({
     height: 32,
     zIndex: 0,
     fontSize: 14,
+    zoom:100,
+    revolve:0,
     fontFamily: "",
     color: "#606266",
     borderRadius: 5,
@@ -68,6 +72,8 @@ registry.register({
     zIndex: 0,
     fontSize: 14,
     color: "#333",
+    zoom:100,
+    revolve:0,
     inputType: "",
     borderRadius: 5,
     render: (data) => <input style={{
@@ -88,6 +94,8 @@ registry.register({
     fontSize: 14,
     color: "#333",
     borderRadius: 0,
+    zoom:100,
+    revolve:0,
     img: "https://www.pics.fineyh.com/images/2022/08/20/202208201641833.png",
     render: (data) => <img src={data.img}
                            style={{
@@ -106,6 +114,8 @@ registry.register({
     zIndex: 0,
     fontSize: 14,
     color: "#333",
+    zoom:100,
+    revolve:0,
     video: "https://www.w3schools.com/html/movie.mp4",
     autoplay: true,
     loop: true,
@@ -126,6 +136,8 @@ registry.register({
     height: 1,
     zIndex: 0,
     background: "#333",
+    zoom:100,
+    revolve:0,
     render: (data) => <hr style={{
         width: `${data.width}px`,
         height: `${data.height}px`,
