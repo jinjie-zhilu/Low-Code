@@ -47,11 +47,6 @@
                 <!-- 右侧属性表单 -->
                 <el-aside class="rightmenu">
                     <ConfigMenu></ConfigMenu>
-                    <h5 style="vertical-align: inherit;">直接编辑代码</h5><br/>
-
-                    <span class="codeedit">
-                        <el-button @click="codeEditor=true">写代码</el-button>
-                    </span>
                 </el-aside>
             </el-container>
         </el-container>
@@ -65,16 +60,6 @@
                 <ShowCanvas class="preview_canvas" id="preview_canvas" :data="{canvas, elements: elements.elements}"></ShowCanvas>
             </el-scrollbar>
         </el-dialog>
-
-         <!-- 写代码区域 -->
-        <el-dialog v-model="codeEditor" class="e-code">
-            <template #header="{ titleId }"><span :id="titleId">代码详情</span></template>
-            <el-scrollbar class="canvas-block flex-center">
-                <CodeMirror></CodeMirror>
-            </el-scrollbar>
-
-        </el-dialog>
-
         <!-- 帮助对话框 -->
         <el-dialog custom-class="help-dialog" v-model="helpDialog" title="操作帮助" width="540px">
             <div class="help-box">
@@ -136,7 +121,6 @@ import { Upload, InfoFilled } from "@element-plus/icons-vue"
 import { getCode, downloadCode } from '@/utils/useExport'
 import { deleteRequest, getRequest, postRequest, putRequest } from '@/http'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import CodeMirror from './CodeMirror.vue'
 
 // 获取画布元素列表
 let elements: ElementsStore = useElementsStore()
@@ -184,9 +168,6 @@ let { undo, redo, deleteElement, clearCanvas } = state.commands
 
 // 显示预览窗口
 let previewDialog: Ref<boolean> = ref(false)
-
-//写代码
-let codeEditor: Ref<boolean> = ref(false)
 
 // 显示帮助窗口
 let helpDialog: Ref<boolean> = ref(false)

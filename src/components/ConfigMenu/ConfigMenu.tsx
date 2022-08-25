@@ -8,13 +8,14 @@ import {
     ElFormItem,
     ElInput,
     ElInputNumber,
-    ElButton,
+    ElOption,
+    ElSelect,
     ElSlider  
 } from "element-plus"
 import {ref, defineComponent, watch} from "vue"
 import type {Ref} from "vue"
 import {computed} from "vue"
-import type {CanvasStore, ElementsStore} from "@/interface"
+import type {CanvasStore, ElementItem, ElementsStore} from "@/interface"
 import "./ConfigMenu.css"
 
 export default defineComponent({
@@ -22,84 +23,39 @@ export default defineComponent({
 
         let elements: ElementsStore = useElementsStore()
         let canvas: CanvasStore = useCanvasStore()
-        // 折叠面板显示内容
+
+        // 折叠面板的展开层
         let configCollapse: Ref<string> = ref('baseConfig')
-        let configCollapse1: Ref<string> = ref('baseConfig1')
-        let configCollapse2: Ref<string> = ref('baseConfig2')
+
         // 当前选中的元素 id
         let focusId: Ref<number> = ref(0)
 
-        // 当前选中的元素
+        // 当前选中是元素还是画布
         let currentFocus: Ref<string> = computed(() => {
-            if (elements.focusElements.focus.length === 1) {
-                let focus = elements.focusElements.focus[0]
+            if (elements.focusElements.focus.length) {
+                let focusList: Array<ElementItem> = elements.focusElements.focus
 
                 elements.elements.forEach((item, index) => {
-                    if (item.id === focus.id) {
+                    if (item.id === focusList[0].id) {
                         focusId.value = index
                         return
                     }
                 })
                 
-                baseConfigMenu.general.title = `[${focus.key}]${focus.id}-样式`
+                baseConfigMenu.general.title = `[${focusList[0].key}-${focusList[0].id}]-样式`
                 return 'general'
             } else {
                 return 'canvas'
             }
         })
 
-        // 各个组件单独设置
-        //文本
-        let currentFocusText: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'text') {
-                return 'text'
+        // 当前选中的元素类型
+        let currentFocusElement: Ref<string> = computed(() => {
+            let focusList: Array<ElementItem> = elements.focusElements.focus
+            if (focusList.length) {
+                return focusList[0].key
             } else {
-                return 'canvas'
-            }
-        })
-
-        //按钮
-        let currentFocusBtn: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'btn') {
-                return 'btn'
-            } else {
-                return 'canvas'
-            }
-        })
-
-        //输入框
-        let currentFocusInput: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'input') {
-                return 'input'
-            } else {
-                return 'canvas'
-            }
-        })
-
-        // 图片
-        let currentFocusImage: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'image') {
-                return 'image'
-            } else {
-                return 'canvas'
-            }
-        })
-
-        //视频
-        let currentFocusVideo: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'video') {
-                return 'video'
-            } else {
-                return 'canvas'
-            }
-        })
-
-        //线段
-        let currentFocusLine: Ref<string> = computed(() => {
-            if (elements.elements[focusId.value] && elements.elements[focusId.value].key === 'line') {
-                return 'line'
-            } else {
-                return 'canvas'
+                return ''
             }
         })
         
@@ -112,139 +68,6 @@ export default defineComponent({
             }
         })
 
-        // let focus1=elements.elements[focusId.value].labelUrl
-
-        // let focus2=elements.elements[focusId.value].labelAlert
-
-        const addEvent1=() =>{
-            let text1=document.getElementById('child1') as HTMLInputElement
-            let text2=document.getElementById('child2') as HTMLInputElement
-            console.log("sdsdff点点带你")
-            if(elements.elements[focusId.value].key=='image'){
-                console.log(elements.elements[focusId.value].key)
-                console.log("输入的网址为:  "+text1.value)
-                console.log("选中的组件:  "+document.getElementById("image"))
-                console.log("组件的宽： "+document.getElementById("image").clientWidth)
-                console.log("组件的高： "+document.getElementById("image").clientHeight)
-                console.log(document)
-                //点击事件
-                document.getElementById("image").addEventListener('click',click)
-
-                function click(){
-                    console.log("点点点歌头1111")
-                    window.open(text1.value,'_blank')
-                }
-            }
-            else if(elements.elements[focusId.value].key=='btn'){
-                document.getElementById("btn").addEventListener('click',click)
-
-                function click(){
-                    console.log("点点点歌头1111")
-                    window.open(text1.value,'_blank')
-                }
-            }
-            else if(elements.elements[focusId.value].key=='text'){
-                document.getElementById("text").addEventListener('click',click)
-
-                function click(){
-                    console.log("点点点歌头1111")
-                    window.open(text1.value,'_blank')
-                }
-            }
-            else if(elements.elements[focusId.value].key=='video'){
-                document.getElementById("video").addEventListener('click',click)
-
-                function click(){
-                    console.log("点点点歌头1111")
-                    window.open(text1.value,'_blank')
-                }
-            }
-            else if(elements.elements[focusId.value].key=='line'){
-                document.getElementById("line").addEventListener('click',click)
-
-                function click(){
-                    console.log("点点点歌头1111")
-                    window.open(text1.value,'_blank')
-                }
-            }
-
-
-            // if(text1){
-            //     return elements.$id['child1'].addEventListener('click',()=>
-            //     {
-            //         console.log("点击了点击了1111");
-            //         window.location.href = text1.value
-            //     })
-            // }
-            // if(text2){
-            //     return elements.$id['child1'].addEventListener('click',()=>
-            //     {
-            //         console.log("点击了点击了22222");
-            //         alert(text2.value)
-            //     })
-            // }
-
-        }
-
-
-        const addEvent2=() =>{
-            let text2=document.getElementById('child2') as HTMLInputElement
-            console.log("vvvvv点点带你")
-            if(elements.elements[focusId.value].key=='image'){
-                console.log(elements.elements[focusId.value].key)
-                console.log("输入的alert为:  "+text2.value)
-                console.log("选中的组件:  "+document.getElementById("image"))
-                console.log("组件的宽： "+document.getElementById("image").clientWidth)
-                console.log("组件的高： "+document.getElementById("image").clientHeight)
-                console.log(document)
-                //点击事件
-                document.getElementById("image").addEventListener('click',click)
-
-                function click(){
-                    console.log(text2.value)
-                    
-                }
-            }
-            else if(elements.elements[focusId.value].key=='btn'){
-                document.getElementById("btn").addEventListener('click',click)
-
-                function click(){
-                    console.log(text2.value)
-                    
-                }
-            }
-            else if(elements.elements[focusId.value].key=='text'){
-                document.getElementById("text").addEventListener('click',click)
-
-                function click(){
-                    console.log(text2.value)
-                    
-                }
-            }
-            else if(elements.elements[focusId.value].key=='video'){
-                document.getElementById("video").addEventListener('click',click)
-
-                function click(){
-                    console.log(text2.value)
-                    
-                }
-            }
-            else if(elements.elements[focusId.value].key=='line'){
-                document.getElementById("line").addEventListener('click',click)
-
-                function click(){
-                    console.log(text2.value)
-                    
-                }
-            }
-
-        }
-
-
-        // 表单更新
-        const update = (value) => {
-
-        }
         const roter = (value) =>{
             let doms = document.querySelectorAll('.element-item')
             doms.forEach((item)=>{
@@ -255,7 +78,7 @@ export default defineComponent({
             })
         }
        //缩放功能
-
+      
         const meth = (value) =>{
             let w = elements.elements[focusId.value].width
             let h = elements.elements[focusId.value].height
@@ -278,7 +101,7 @@ export default defineComponent({
                 form:
                     <ElForm label-position="left" label-width="100px" model={canvas} style="max-width: 100%">
                         <ElFormItem label="画布背景">
-                            <ElColorPicker v-model={canvas.bgColor}/>
+                            <ElColorPicker v-model={canvas.bgColor} />
                         </ElFormItem>
                         <ElFormItem label="画布宽度">
                             <div class="input-number">
@@ -317,7 +140,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].left}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -328,7 +150,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].top}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -339,7 +160,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].width}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -350,7 +170,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].height}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -361,26 +180,44 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].zIndex}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                             </div>
                         </ElFormItem>
                         <ElFormItem label="旋转角度">
-                            <ElSlider  
-                            max={360}
-                            v-model={elements.elements[focusId.value].revolve}  
-                            onInput={roter}
+                            <ElSlider
+                                max={360}
+                                v-model={elements.elements[focusId.value].revolve}
+                                onInput={roter}
                             />
                         </ElFormItem>
                         <ElFormItem label="缩放比例">
-                            <ElSlider  
-                            max={200}
-                            v-model={elements.elements[focusId.value].zoom}  
-                            onChange={meth}
+                            <ElSlider
+                                max={200}
+                                v-model={elements.elements[focusId.value].zoom}
+                                onChange={meth}
                             />
                         </ElFormItem>
                     </ElForm>
-            },
+            }
+        }
+
+        // 字体族
+        const fontFamilys: Array<{ [key: string]: string }> = [{
+                label: '黑体',
+                value: 'sans-serif'
+            }, {
+                label: '宋体',
+                value: 'serif'
+            }, {
+                label: '仿宋',
+                value: 'fangsong'
+            }, {
+                label: '楷体',
+                value: 'cursive'
+            }]
+
+        // 组件属性配置表单
+        const elementConfigMenu ={
             text: {
                 title: '文本属性',
                 form:
@@ -394,7 +231,6 @@ export default defineComponent({
                             <ElInput
                                 v-model={elements.elements[focusId.value].label}
                                 type="textarea"
-                                onChange={update}
                             />
                         </ElFormItem>
                         <ElFormItem label="字号">
@@ -403,16 +239,19 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].fontSize}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
                         </ElFormItem>
                         <ElFormItem label="字体">
-                            <ElInput
-                                v-model={elements.elements[focusId.value].fontFamily}
-                                onChange={update}
-                            />
+                            <ElSelect v-model={elements.elements[focusId.value].fontFamily} placeholder="字体选择">
+                                {fontFamilys.map(item =>
+                                    <ElOption
+                                        key={item.value}
+                                        label={item.label}
+                                        value={item.value}
+                                    />)}
+                            </ElSelect>
                         </ElFormItem>
                         <ElFormItem label="字体颜色">
                             <ElColorPicker v-model={elements.elements[focusId.value].color}/>
@@ -434,13 +273,11 @@ export default defineComponent({
                         <ElFormItem label="按钮内容">
                             <ElInput
                                 v-model={elements.elements[focusId.value].label}
-                                onChange={update}
                             />
                         </ElFormItem>
                         <ElFormItem label="字体">
                             <ElInput
                                 v-model={elements.elements[focusId.value].fontFamily}
-                                onChange={update}
                             />
                         </ElFormItem>
                         <ElFormItem label="边框半径">
@@ -449,7 +286,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].borderRadius}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -472,13 +308,11 @@ export default defineComponent({
                             <ElInput
                                 v-model={elements.elements[focusId.value].label}
                                 type="textarea"
-                                onChange={update}
                             />
                         </ElFormItem>
                         <ElFormItem label="类型 Type">
                             <ElInput
                                 v-model={elements.elements[focusId.value].inputType}
-                                onChange={update}
                             >
                             </ElInput>
                         </ElFormItem>
@@ -488,7 +322,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].borderRadius}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -508,7 +341,6 @@ export default defineComponent({
                             <ElInput
                                 v-model={elements.elements[focusId.value].img}
                                 type="textarea"
-                                onChange={update}
                             />
                         </ElFormItem>
                         <ElFormItem label="边框半径">
@@ -517,7 +349,6 @@ export default defineComponent({
                                     v-model={elements.elements[focusId.value].borderRadius}
                                     controlsPosition='right'
                                     precision={0}
-                                    onChange={update}
                                 />
                                 <span class='unit'>px</span>
                             </div>
@@ -536,8 +367,6 @@ export default defineComponent({
                         <ElFormItem label="视频地址">
                             <ElInput
                                 v-model={elements.elements[focusId.value].video}
-                                type="textarea"
-                                onChange={update}
                             />
                         </ElFormItem>
                         <ElFormItem label="播放设置" size="small">
@@ -570,38 +399,16 @@ export default defineComponent({
                         model={elements.elements[focusId.value]}
                         style="max-width: 100%"
                     >
-                        <ElFormItem label="跳转url">
-                            <ElInput
-                                v-model={elements.elements[focusId.value].labelUrl}
-                                id="child1"
-                                type="textarea"
-                                placeholder="请输入要跳转的url"
-                                onChange={update}
-                                clearable />
-                                <ElButton style="margin-top: 20px;" onClick={addEvent1}>确定</ElButton>
+                        <ElFormItem label="事件">
+                            <ElInput></ElInput>
                         </ElFormItem>
-                        <ElFormItem label="alert内容">
-                            <ElInput
-                                v-model={elements.elements[focusId.value].labelAlert}
-                                id="child2"
-                                type="textarea"
-                                placeholder="请输入要alert的内容"
-                                onChange={update}
-                                clearable />
-                            <ElButton style="margin-top: 20px;" onClick={addEvent2}>确定</ElButton>
-                        </ElFormItem>
-                        
-
-                        
-
                     </ElForm>,
             },
         }
 
-
         return () => (
             <div>
-                {/*基础样式*/}
+                {/* 基础样式 */}
                 <div class="config-box">
                     <ElCollapse v-model={configCollapse.value} accordion>
                         <ElCollapseItem
@@ -610,81 +417,15 @@ export default defineComponent({
                         >
                             {baseConfigMenu[currentFocus.value].form}
                         </ElCollapseItem>
-                    </ElCollapse>
-                </div>
-                {/*文本*/}
-                <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "text" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse1.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusText.value].title}</h4>}}
-                            name="baseConfig1"
+                        {currentFocusElement.value != '' ? <ElCollapseItem
+                            v-slots={{ title: () => <h4>{elementConfigMenu[currentFocusElement.value].title}</h4> }}
+                            name="elementConfig"
                         >
-                            {baseConfigMenu[currentFocusText.value].form}
-                        </ElCollapseItem>
+                            {elementConfigMenu[currentFocusElement.value].form}
+                        </ElCollapseItem> : null}
                     </ElCollapse>
                 </div>
-                {/*按钮*/}
-                <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "btn" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse1.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusBtn.value].title}</h4>}}
-                            name="baseConfig1"
-                        >
-                            {baseConfigMenu[currentFocusBtn.value].form}
-                        </ElCollapseItem>
-                    </ElCollapse>
-                </div>
-                {/*输入框*/}
-                <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "input" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse1.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusInput.value].title}</h4>}}
-                            name="baseConfig1"
-                        >
-                            {baseConfigMenu[currentFocusInput.value].form}
-                        </ElCollapseItem>
-                    </ElCollapse>
-                </div>
-                {/*图片*/}
-                <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "image" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse1.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusImage.value].title}</h4>}}
-                            name="baseConfig1"
-                        >
-                            {baseConfigMenu[currentFocusImage.value].form}
-                        </ElCollapseItem>
-                    </ElCollapse>
-                </div>
-                {/*视频*/}
-                <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "video" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse1.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusVideo.value].title}</h4>}}
-                            name="baseConfig1"
-                        >
-                            {baseConfigMenu[currentFocusVideo.value].form}
-                        </ElCollapseItem>
-                    </ElCollapse>
-                </div>
-                {/*线段*/}
-                <div class="config-box"
-                     v-show={elements.elements[focusId.value] && elements.elements[focusId.value].key === "line" && elements.focusElements.focus.length === 1}>
-                    <ElCollapse v-model={configCollapse1.value} accordion>
-                        <ElCollapseItem
-                            v-slots={{title: () => <h4>{baseConfigMenu[currentFocusLine.value].title}</h4>}}
-                            name="baseConfig1"
-                        >
-                            {baseConfigMenu[currentFocusLine.value].form}
-                        </ElCollapseItem>
-                    </ElCollapse>
-                </div>
-                {/*自定义事件*/}
+                {/*自定义事件
                 <div class="config-box"
                 v-show={elements.elements[focusId.value] && elements.focusElements.focus.length === 1}
                 >
@@ -696,7 +437,7 @@ export default defineComponent({
                             {baseConfigMenu[currentFocusEvent.value].form}
                         </ElCollapseItem>
                     </ElCollapse>
-                </div>
+                </div>*/}
             </div>
         )
     }
