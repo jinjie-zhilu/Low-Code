@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { ElementItem, ElementsStore } from "@/interface"
 import { deepcopy } from '@/utils/deepcopy'
+import $ from 'jquery'
 
 export const useElementsStore: () => ElementsStore = defineStore('elements', {  
     state: () => {

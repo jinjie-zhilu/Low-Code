@@ -1,4 +1,3 @@
-import { ElButton } from 'element-plus'
 import { ComponentRegisty } from '@/interface'
 
 // 创建映射函数
@@ -68,6 +67,7 @@ registry.register({
 registry.register({
     key: 'input',
     label: '输入框',
+    value: '文本',
     focus: false,
     width: 180,
     height: 32,
@@ -84,7 +84,7 @@ registry.register({
         width: `${data.width}px`,
         height: `${data.height}px`,
         borderRadius: `${data.borderRadius}px`,
-    }} placeholder={data.label} type={data.inputType}></input>
+    }} placeholder={data.label}></input>
 })
 
 registry.register({

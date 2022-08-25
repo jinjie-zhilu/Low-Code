@@ -1,7 +1,7 @@
-import { computed, inject } from 'vue'
+import { computed, inject, ref, Ref } from 'vue'
 import { ComponentRegisty, ElementItem, ElementsStore } from '@/interface'
 import { useElementsStore } from '@/store'
-import { Action, ElMessage, ElMessageBox } from 'element-plus'
+import { ElInput, ElNotification } from 'element-plus'
 
 export function renderElement(state: string, data: ElementItem) {
 
@@ -31,8 +31,29 @@ export function renderElement(state: string, data: ElementItem) {
     let components: ComponentRegisty = inject('components')
 
     // 获取组件的 render
-    const renderComponent = components.componentMap[data.key].render(data)
+    let renderComponent = components.componentMap[data.key].render(data)
 
+    if (data.key === 'input') {
+        let index = 0
+        elements.elements.forEach((item, i) => {
+            if (item.id === data.id) {
+                index = i
+                return
+            }
+        })
+        
+        renderComponent = (
+            <ElInput style={{
+                    lineHeight: `${data.height}px`,
+                    width: `${data.width}px`,
+                    height: `${data.height}px`,
+                    borderRadius: `${data.borderRadius}px`,
+                }}
+                placeholder={data.label}
+                v-model={elements.elements[index].value}
+            />
+        )
+    }
     // 获取组件触发事件
     let eventsObj = {
         click: null,
@@ -49,14 +70,16 @@ export function renderElement(state: string, data: ElementItem) {
         
         if (action === 'href') {
             eventsObj[event] = () => {
-                window.open(content)
+                console.log(params, elements.processString(params[2].split('))')[0]));
+                
+                window.open(elements.processString(params[2].split('))')[0]))
             }
         } else if (action === 'alert') {
-            eventsObj[event] = () => ElMessageBox.alert(content, 'Tips', {
-                confirmButtonText: 'OK',
+            eventsObj[event] = () => ElNotification({
+                title: 'Tips',
+                message: content
             })
         }
-        
     })
 
     // 生成模板

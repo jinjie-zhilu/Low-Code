@@ -11,6 +11,7 @@ import {
     ElInputNumber,
     ElMessage,
     ElOption,
+    ElPopover,
     ElSelect,
     ElSlider  
 } from "element-plus"
@@ -468,9 +469,19 @@ export default defineComponent({
                     <ElFormItem>
                         <ElButton onClick={addEvent}>添加事件</ElButton>
                     </ElFormItem>
-                    <ElFormItem label="事件代码">
-                        <ElInput v-model={eventCode.value} type="textarea" onChange={codeChange}/>
-                    </ElFormItem>
+                    <ElPopover
+                        title="事件代码说明"
+                        width={300}
+                        trigger="click"
+                        placement="left"
+                        content="事件代码格式为'触发条件(事件(参数))',其中参数可以使用{组件名.属性}的方式进行插值，例如click(href({input-0.value}))。"
+                        v-slots={{
+                            reference: () => (
+                                <ElFormItem label="事件代码">
+                                    <ElInput v-model={eventCode.value} type="textarea" onChange={codeChange} />
+                                </ElFormItem>
+                        ) }}
+                    />
                 </ElForm>
         }
 

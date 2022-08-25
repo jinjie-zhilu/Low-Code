@@ -28,7 +28,7 @@ export function renderElement(data: ElementItem, elementMouseDown: Function, ele
 
     // 获取组件的 render
     const renderComponent = components.componentMap[data.key].render(data)
-
+    
     // 生成模板
     return (
         <div

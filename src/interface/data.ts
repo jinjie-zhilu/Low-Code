@@ -40,7 +40,8 @@ export interface ElementItem {
     render?: Function,
     zoom?: number,
     revolve?: number,
-    event?: string
+    event?: string,
+    value?: string
 }
 
 // 发布页面数据
