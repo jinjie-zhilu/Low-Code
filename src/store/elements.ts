@@ -82,11 +82,9 @@ export const useElementsStore: () => ElementsStore = defineStore('elements', {
         },
         // 更新事件代码
         updateCode(id: number, code: string): void {
-            this.elements.forEach(element => {
-                if (element.id === id) {
-                    element.event = code
-                }
-            })
+            console.log(id, code);
+            
+            this.elements[id].event = code
         },
         // 处理带参字符串
         processString(paramStr: string): string {
