@@ -86,7 +86,7 @@ Low-Code
 ## 示例图片
 
 ### 白昼模式
-![image.png](https://s2.loli.net/2022/08/14/5YaV2oyI9FrSbzA.png)
+![image.png](https://mp-7fb7e0af-a64d-427e-97fc-68ab0c32c3fd.cdn.bspapp.com/cloudstorage/9a3da546-f0ee-4d81-b9d2-d359120bccce.png)
 
 ### 黑夜模式
-![image.png](https://s2.loli.net/2022/08/14/f1TGVaEx8yvWz6R.png)
+![image.png](https://mp-7fb7e0af-a64d-427e-97fc-68ab0c32c3fd.cdn.bspapp.com/cloudstorage/b0a1c481-0c44-4b0f-b1e0-880d40dacffb.png)
